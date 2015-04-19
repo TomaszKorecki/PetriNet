@@ -10,6 +10,7 @@ import javax.vecmath.Vector2d;
 
 /**
  * Created by Tomasz on 4/19/2015.
+ * Extended  button class with ImageView which can be dragged
  */
 public class DraggableButton extends Button {
     private  final Vector2d dragDelta;
@@ -17,6 +18,9 @@ public class DraggableButton extends Button {
     private Pane draggablePane;
     private ImageView draggableElement;
 
+    /*
+    Draggable Pane - root pane for dragging canvas
+     */
     public DraggableButton(Pane draggablePane){
         this.draggablePane = draggablePane;
         dragDelta = new Vector2d();
@@ -28,7 +32,6 @@ public class DraggableButton extends Button {
 
     private void OnDraggableElementMousePressed(MouseEvent mouseEvent){
         System.out.println("Pressed start");
-
         setMouseTransparent(true);
         this.draggableElement = new ImageView(((ImageView)getGraphic()).getImage());
         draggablePane.getChildren().addAll(draggableElement);
@@ -48,6 +51,4 @@ public class DraggableButton extends Button {
         draggablePane.getChildren().remove(draggableElement);
         draggableElement = null;
     }
-
-
 }
