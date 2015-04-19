@@ -5,16 +5,24 @@ package pl.edu.agh.petrinet.gui.graphs;
  */
 
 import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
-import edu.uci.ics.jung.algorithms.layout.util.Relaxer;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
-import javafx.scene.layout.Region;
+import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
+import edu.uci.ics.jung.visualization.VisualizationModel;
+import javafx.geometry.Point2D;
+import javafx.scene.Group;
+import javafx.scene.layout.Pane;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.CircleBuilder;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.LineBuilder;
+import javafx.util.Pair;
 import pl.edu.agh.petrinet.model.*;
 
 import java.awt.*;
 
-public class PetriGraphViewer extends Region {
-    private Relaxer relaxer;
+public class PetriGraphViewer  {
     private Layout<PetriVertex, PetriEdge> layout;
     private PetriGraph petriGraph;
     private double CIRCLE_SIZE = 20;
@@ -40,6 +48,11 @@ public class PetriGraphViewer extends Region {
     public Layout<PetriVertex, PetriEdge> getLayout(){
         return layout;
     }
+
+    public void drawGraph(Pane pane){
+
+    }
+
 
     public static PetriGraphViewer GetTestPetriGraphViewer(){
         PetriGraph ptGrapgh = new PetriGraph();

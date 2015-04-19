@@ -72,7 +72,7 @@ public class MainView extends Application {
         PetriGraphViewer viewer = PetriGraphViewer.GetTestPetriGraphViewer();
 
         centerPane = new StackPane();
-        centerPane.getChildren().add(swingNode);
+        viewer.drawGraph(centerPane);
 
         rootPane.setCenter(centerPane);
     }

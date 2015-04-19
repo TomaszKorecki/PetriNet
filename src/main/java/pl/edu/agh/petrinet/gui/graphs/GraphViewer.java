@@ -50,6 +50,7 @@ public class GraphViewer<V, E> extends Region{
             java.awt.geom.Point2D p = layout.transform(v);
 
             // draw the vertex as a circle
+
             Circle circle = CircleBuilder.create()
                     .centerX(p.getX())
                     .centerY(p.getY())
