@@ -40,7 +40,6 @@ public class DraggableButton extends Button {
     }
 
     private void OnDraggableElementMouseDragged(MouseEvent mouseEvent){
-        System.out.println("Dragging");
         draggableElement.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
         draggableElement.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
     }

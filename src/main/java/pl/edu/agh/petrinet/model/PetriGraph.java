@@ -1,34 +1,38 @@
 package pl.edu.agh.petrinet.model;
 
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseMultigraph;
-import edu.uci.ics.jung.graph.util.EdgeType;
 
-/**
- * Created by Tomasz on 4/19/2015.
- */
 public class PetriGraph {
-    private Graph graph;
 
-    public PetriGraph(){
-        graph = new SparseMultigraph<PetriPlace, PetriTransition>();
+    private Graph<PetriVertex, PetriEdge> graph;
 
-
+    public PetriGraph() {
+        graph = new DirectedSparseMultigraph<>();
+        initialize();
     }
 
-    public Graph getGraph(){
+    public Graph<PetriVertex, PetriEdge> getGraph() {
         return graph;
     }
 
-    public void addTransitionVertex(PetriTransition petriTransition){
-        graph.addVertex(petriTransition);
+    public void setGraph(Graph<PetriVertex, PetriEdge> graph) {
+        this.graph = graph;
     }
 
-    public void addPlaceVertex(PetriPlace petriPlace){
-        graph.addVertex(petriPlace);
+    private void initialize() {
+        PetriVertex v1 = new PetriPlace(1, "PP1");
+        PetriVertex v2 = new PetriPlace(2, "PP2");
+        PetriVertex v3 = new PetriPlace(3, "PP3");
+
+        graph.addVertex(v1);
+        graph.addVertex(v2);
+        graph.addVertex(v3);
+
+        graph.addEdge(new PetriEdge(v1, v2), v1, v2);
+        graph.addEdge(new PetriEdge(v2, v3), v2, v3);
+        graph.addEdge(new PetriEdge(v3, v1), v3, v1);
+
     }
 
-    public void addEdge(PetriEdge petriEdge, PetriVertex begin, PetriVertex end){
-        graph.addEdge(petriEdge, begin, end, EdgeType.DIRECTED);
-    }
 }

@@ -49,7 +49,7 @@ public class MainView extends Application {
      */
     private void createMenuStructure(Stage primaryStage){
         rootPane = new BorderPane();
-        //createLeftPane();
+        createLeftPane();
         createCenterPane();
         primaryStage.setTitle("Petri Net Editor");
         primaryStage.setScene(new Scene(rootPane, 900, 640));

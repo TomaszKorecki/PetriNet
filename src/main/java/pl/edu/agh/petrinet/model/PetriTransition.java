@@ -1,16 +1,20 @@
 package pl.edu.agh.petrinet.model;
 
-/**
- * Created by Tomasz on 4/19/2015.
- */
 public class PetriTransition extends PetriVertex {
 
-    public PetriTransition(int id){
+    public PetriTransition(int id) {
         super(id);
     }
 
+    public PetriTransition(int id, String name) {
+        super(id, name);
+    }
 
-    public String toString(){
-        return "T" + id;
+    @Override
+    public String toString() {
+        return "PetriTransition{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
