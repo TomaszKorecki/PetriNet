@@ -1,5 +1,10 @@
 package pl.edu.agh.petrinet.gui;
 
+import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Pos;
@@ -8,9 +13,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import pl.edu.agh.petrinet.gui.graphs.PetriGraphViewer;
+import pl.edu.agh.petrinet.model.PetriEdge;
+import pl.edu.agh.petrinet.model.PetriGraph;
+import pl.edu.agh.petrinet.model.PetriVertex;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
 
 
 public class MainView extends Application {
@@ -23,6 +32,7 @@ public class MainView extends Application {
     private GridPane leftPane;
     private StackPane topPane;
     private StackPane centerPane;
+    private SwingNode swingNode;
 
     public static void main(String[] args) {
         launch(args);
@@ -39,7 +49,7 @@ public class MainView extends Application {
      */
     private void createMenuStructure(Stage primaryStage){
         rootPane = new BorderPane();
-        createLeftPane();
+        //createLeftPane();
         createCenterPane();
         primaryStage.setTitle("Petri Net Editor");
         primaryStage.setScene(new Scene(rootPane, 900, 640));
@@ -68,12 +78,23 @@ public class MainView extends Application {
     /*
     Creates pane for JUNG's Graph
      */
-    private void createCenterPane(){
-        PetriGraphViewer viewer = PetriGraphViewer.GetTestPetriGraphViewer();
-
+    private void createCenterPane() {
         centerPane = new StackPane();
-        viewer.drawGraph(centerPane);
 
+        PetriGraph petriGraph = new PetriGraph();
+        VisualizationViewer<PetriVertex, PetriEdge> visualizationViewer = new VisualizationViewer<>(new ISOMLayout<>(petriGraph.getGraph()));
+        visualizationViewer.setBorder(new TitledBorder("Graf testowy"));
+        DefaultModalGraphMouse<Object, Object> gm = new DefaultModalGraphMouse<>();
+        visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<>());
+
+        gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+        visualizationViewer.setGraphMouse(gm);
+        visualizationViewer.setPreferredSize(new Dimension(600, 400));
+
+        swingNode = new SwingNode();
+        SwingUtilities.invokeLater(() -> swingNode.setContent(visualizationViewer));
+
+        centerPane.getChildren().add(swingNode);
         rootPane.setCenter(centerPane);
     }
 }
