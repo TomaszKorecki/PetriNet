@@ -3,6 +3,7 @@ package pl.edu.agh.petrinet.model;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import pl.edu.agh.petrinet.algorithms.IncidenceMatrix;
+import pl.edu.agh.petrinet.algorithms.ReachabilityGraph;
 
 public class PetriGraph {
 
@@ -55,7 +56,7 @@ public class PetriGraph {
     public int getTransitionsCount() {return this.transitionsCount;}
 
     private void initialize() {
-        PetriPlace v1 = new PetriPlace(0, "PP0");
+        PetriPlace v1 = new PetriPlace(0, "PP0", 2);
         PetriPlace v2 = new PetriPlace(1, "PP1");
         PetriPlace v3 = new PetriPlace(2, "PP2");
 
@@ -75,7 +76,7 @@ public class PetriGraph {
         addEdge(t2, v3);
 
         IncidenceMatrix ic = new IncidenceMatrix(this);
-
+        ReachabilityGraph rg = new ReachabilityGraph(this, ic);
     }
 
 }

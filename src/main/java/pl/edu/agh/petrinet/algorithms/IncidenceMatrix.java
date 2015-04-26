@@ -16,7 +16,9 @@ public class IncidenceMatrix {
 
     private int[][] positiveMatrix;
     private int[][] negativeMatrix;
+    private int[][] tNegativeMatrix;
     private int[][] incidenceMatrix;
+    private int[][] tIncidenceMatrix;
 
     private int placesCount;
     private int transitionsCount;
@@ -30,6 +32,8 @@ public class IncidenceMatrix {
         positiveMatrix = new int[placesCount][transitionsCount];
         negativeMatrix = new int[placesCount][transitionsCount];
         incidenceMatrix = new int[placesCount][transitionsCount];
+        tIncidenceMatrix = new int[transitionsCount][placesCount];
+        tNegativeMatrix = new int[transitionsCount][placesCount];
 
         generate();
     }
@@ -41,6 +45,7 @@ public class IncidenceMatrix {
             for(PetriEdge pe : edges){
                 if(pe.getV1() instanceof PetriPlace){
                     negativeMatrix[ pe.getV1().getId() ][ pe.getV2().getId() ] = pe.getMarkersCount();
+                    tNegativeMatrix[ pe.getV2().getId() ][ pe.getV1().getId() ] = pe.getMarkersCount();
                 }
                 else{
                     positiveMatrix[ pe.getV2().getId() ][ pe.getV1().getId() ] = pe.getMarkersCount();
@@ -50,6 +55,7 @@ public class IncidenceMatrix {
             for(int i = 0; i < placesCount; i++){
                 for(int j =0; j < transitionsCount; j++){
                     incidenceMatrix[i][j] = positiveMatrix[i][j] - negativeMatrix[i][j];
+                    tIncidenceMatrix[j][i] = incidenceMatrix[i][j];
                 }
             }
 
@@ -61,6 +67,14 @@ public class IncidenceMatrix {
 
     public int[][] getIncidenceMatrix(){
         return incidenceMatrix;
+    }
+
+    public int[][] getTIncidenceMatrix(){
+        return tIncidenceMatrix;
+    }
+
+    public int[][] getTNegativeMatrix(){
+        return tNegativeMatrix;
     }
 
 }

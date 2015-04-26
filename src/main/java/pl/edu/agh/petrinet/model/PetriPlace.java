@@ -9,9 +9,23 @@ public class PetriPlace extends PetriVertex {
         marksersCount = 0;
     }
 
+    public PetriPlace(int id, int startupMarkersCount) {
+        super(id);
+        this.marksersCount = startupMarkersCount;
+    }
+
     public PetriPlace(int id, String name) {
         super(id, name);
         marksersCount = 0;
+    }
+
+    public PetriPlace(int id, String name, int startupMarkersCount) {
+        super(id, name);
+        this.marksersCount = startupMarkersCount;
+    }
+
+    public int getMarksersCount(){
+        return this.marksersCount;
     }
 
     @Override
