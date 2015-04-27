@@ -20,6 +20,8 @@ public class IncidenceMatrix {
     private int[][] incidenceMatrix;
     private int[][] tIncidenceMatrix;
 
+    private boolean[] isCollectorTransition;
+
     private int placesCount;
     private int transitionsCount;
 
@@ -75,6 +77,39 @@ public class IncidenceMatrix {
 
     public int[][] getTNegativeMatrix(){
         return tNegativeMatrix;
+    }
+
+    private void initCollectorTransition(){
+        if(isCollectorTransition == null){
+            isCollectorTransition = new boolean[transitionsCount];
+
+            int sum;
+            for(int i = 0; i < transitionsCount; i++){
+                sum = 0;
+                for(int j=0; j< placesCount; j++){
+                    sum += tIncidenceMatrix[i][j];
+                }
+
+                isCollectorTransition[i] = sum > 0;
+            }
+
+        }
+    }
+
+    public boolean hasCollectorTransition(){
+        initCollectorTransition();
+
+        for(int i = 0; i < transitionsCount; i++){
+            if(isCollectorTransition[i])
+                return true;
+        }
+
+        return false;
+    }
+
+    public boolean isColectorTransition(int id){
+        initCollectorTransition();
+        return isCollectorTransition[id];
     }
 
 }

@@ -1,6 +1,8 @@
 package pl.edu.agh.petrinet.model;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by rakiop on 26.04.15.
@@ -11,9 +13,23 @@ public class PetriStateVertex {
 
     private int level;
 
+    private List<Integer> route;
+
+
     public PetriStateVertex(int[] status, int level){
         this.placeStatus = status;
         this.level = level;
+        route = new LinkedList<>();
+    }
+
+    public PetriStateVertex(int[] status, int level, List<Integer> route){
+        this.placeStatus = status;
+        this.level = level;
+        this.route = new LinkedList<>();
+
+        for(Integer id : route){
+            this.route.add(id);
+        }
     }
 
     public int getLevel(){
@@ -26,6 +42,14 @@ public class PetriStateVertex {
 
     public int[] getPlaceMarksCounts(){
         return placeStatus;
+    }
+
+    public void addToRoute(int tId){
+        route.add(tId);
+    }
+
+    public List<Integer> getRoute(){
+        return route;
     }
 
     @Override
