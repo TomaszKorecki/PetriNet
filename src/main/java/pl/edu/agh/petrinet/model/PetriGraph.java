@@ -5,12 +5,20 @@ import edu.uci.ics.jung.graph.Graph;
 import pl.edu.agh.petrinet.algorithms.IncidenceMatrix;
 import pl.edu.agh.petrinet.algorithms.ReachabilityGraph;
 
+import java.util.HashMap;
+
 public class PetriGraph {
+
+    public enum Type{
+        DEFAULT, PRIORYTY, TIME
+    }
+
+    private Type type = Type.DEFAULT;
 
     private Graph<PetriVertex, PetriEdge> graph;
 
-    private int placesCount;
-    private int transitionsCount;
+    private HashMap<Integer, PetriPlace> places;
+    private HashMap<Integer, PetriTransition> transitions;
 
     private IncidenceMatrix incidenceMatrix;
 
@@ -18,9 +26,18 @@ public class PetriGraph {
 
     private int[] m0;
 
-    public PetriGraph() {
+    public PetriGraph(){
+        type = Type.DEFAULT;
         graph = new DirectedSparseMultigraph<>();
-        initialize();
+        places = new HashMap<>();
+        transitions = new HashMap<>();
+    }
+
+    public PetriGraph(Type t) {
+        type = t;
+        graph = new DirectedSparseMultigraph<>();
+        places = new HashMap<>();
+        transitions = new HashMap<>();
     }
 
     public Graph<PetriVertex, PetriEdge> getGraph() {
@@ -33,12 +50,12 @@ public class PetriGraph {
 
     public void addPlace(PetriPlace p){
         graph.addVertex(p);
-        ++placesCount;
+        places.put(p.getId(), p);
     }
 
     public void addTransition(PetriTransition t){
         graph.addVertex(t);
-        ++transitionsCount;
+        transitions.put(t.getId(), t);
     }
 
     public void addEdge(PetriPlace p, PetriTransition t){
@@ -57,9 +74,9 @@ public class PetriGraph {
         graph.addEdge(new PetriEdge(t, p, m), t, p);
     }
 
-    public int getPlacesCount(){return this.placesCount;}
+    public int getPlacesCount(){return places.size();}
 
-    public int getTransitionsCount() {return this.transitionsCount;}
+    public int getTransitionsCount() {return transitions.size();}
 
     public IncidenceMatrix getIncidenceMatrix(){
         return this.incidenceMatrix;
@@ -69,40 +86,18 @@ public class PetriGraph {
         return this.reachabilityGraph;
     }
 
-    private void initialize() {
-        PetriPlace v1 = new PetriPlace(0, "PP0", 1);
-        PetriPlace v2 = new PetriPlace(1, "PP1");
-        PetriPlace v3 = new PetriPlace(2, "PP2", 1);
-        PetriPlace v4 = new PetriPlace(3, "PP3");
-        PetriPlace v5 = new PetriPlace(4, "PP4");
+    private void computeM0(){
+        m0 = new int[getPlacesCount()];
 
-        addPlace(v1);
-        addPlace(v2);
-        addPlace(v3);
-        addPlace(v4);
-        addPlace(v5);
+        for(PetriVertex pv : graph.getVertices()){
+            if(pv instanceof PetriPlace){
+                ((PetriPlace) pv).resetMarkersCount();
+                m0[pv.getId()] = ((PetriPlace) pv).getMarksersCount();
+            }
+        }
+    }
 
-        PetriTransition t1 = new PetriTransition(0);
-        PetriTransition t2 = new PetriTransition(1);
-        PetriTransition t3 = new PetriTransition(2);
-        PetriTransition t4 = new PetriTransition(3);
-
-        addTransition(t1);
-        addTransition(t2);
-        addTransition(t3);
-        addTransition(t4);
-
-        addEdge(v1, t1);
-        addEdge(t1, v2);
-        addEdge(v2, t2);
-        addEdge(t2, v5, 2);
-        addEdge(t2, v1);
-        addEdge(v5, t3, 2);
-        addEdge(t3, v4);
-        addEdge(v4, t4);
-        addEdge(t4, v3);
-        addEdge(v3, t3);
-
+    public void compute() {
         computeM0();
 
         incidenceMatrix = new IncidenceMatrix(this);
@@ -110,18 +105,37 @@ public class PetriGraph {
 
     }
 
-    private void computeM0(){
-        m0 = new int[getPlacesCount()];
+    public int[] getM0(){
+        return this.m0;
+    }
+
+    public int[] getCurrentState(){
+        int[] ret = new int[getPlacesCount()];
 
         for(PetriVertex pv : graph.getVertices()){
             if(pv instanceof PetriPlace){
-                m0[pv.getId()] = ((PetriPlace) pv).getMarksersCount();
+                ret[pv.getId()] = ((PetriPlace) pv).getMarksersCount();
             }
         }
+        return ret;
     }
 
-    public int[] getM0(){
-        return this.m0;
+    public Type getType(){
+        return this.type;
+    }
+
+    public PetriPlace getPlace(int i){
+        if(places.containsKey(i)){
+            return places.get(i);
+        }
+        return null;
+    }
+
+    public PetriTransition getTransition(int i){
+        if(transitions.containsKey(i)){
+            return transitions.get(i);
+        }
+        return null;
     }
 
 }
