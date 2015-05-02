@@ -53,9 +53,25 @@ public class PetriGraph {
         places.put(p.getId(), p);
     }
 
+    public boolean removePlace(PetriPlace p){
+        boolean result = graph.removeVertex(p);
+        if(result){
+            places.remove(p);
+        }
+        return result;
+    }
+
     public void addTransition(PetriTransition t){
         graph.addVertex(t);
         transitions.put(t.getId(), t);
+    }
+
+    public boolean removeTransition(PetriTransition t){
+        boolean result = graph.removeVertex(t);
+        if(result){
+            transitions.remove(t);
+        }
+        return result;
     }
 
     public void addEdge(PetriPlace p, PetriTransition t){
@@ -73,6 +89,8 @@ public class PetriGraph {
     public void addEdge(PetriTransition t,PetriPlace p, int m){
         graph.addEdge(new PetriEdge(t, p, m), t, p);
     }
+
+    public void removeEdge(PetriEdge e){ graph.removeEdge(e);}
 
     public int getPlacesCount(){return places.size();}
 
