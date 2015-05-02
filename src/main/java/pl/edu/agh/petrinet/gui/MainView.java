@@ -1,10 +1,5 @@
 package pl.edu.agh.petrinet.gui;
 
-import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
-import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Pos;
@@ -16,8 +11,6 @@ import javafx.stage.Stage;
 import pl.edu.agh.petrinet.model.*;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import java.awt.*;
 
 
 public class MainView extends Application {
@@ -81,17 +74,11 @@ public class MainView extends Application {
 
         PetriGraph petriGraph = new PetriGraph();
         fillDefaultGraph(petriGraph);
-        VisualizationViewer<PetriVertex, PetriEdge> visualizationViewer = new VisualizationViewer<>(new ISOMLayout<>(petriGraph.getGraph()));
-        visualizationViewer.setBorder(new TitledBorder("Graf testowy"));
-        DefaultModalGraphMouse<Object, Object> gm = new DefaultModalGraphMouse<>();
-        visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<>());
-
-        gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
-        visualizationViewer.setGraphMouse(gm);
-        visualizationViewer.setPreferredSize(new Dimension(600, 400));
 
         swingNode = new SwingNode();
-        SwingUtilities.invokeLater(() -> swingNode.setContent(visualizationViewer));
+        PetriNetVisualizationViewer petriNetVIsualizationViewer = new PetriNetVisualizationViewer(petriGraph);
+
+        SwingUtilities.invokeLater(() -> swingNode.setContent(petriNetVIsualizationViewer.getVisualizationViewer()));
 
         centerPane.getChildren().add(swingNode);
         rootPane.setCenter(centerPane);
@@ -131,5 +118,4 @@ public class MainView extends Application {
         petriGraph.addEdge(t4, v3);
         petriGraph.addEdge(v3, t3);
     }
-
 }
