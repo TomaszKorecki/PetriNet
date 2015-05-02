@@ -3,17 +3,14 @@ package pl.edu.agh.petrinet.gui;
 import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.*;
-import edu.uci.ics.jung.visualization.decorators.EllipseVertexShapeTransformer;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import javafx.scene.shape.Circle;
 import org.apache.commons.collections15.Transformer;
+import pl.edu.agh.petrinet.gui.customPlugins.PetriNetEditingEdgeMousePlugin;
+import pl.edu.agh.petrinet.gui.customPlugins.PetriNetGraphPopup;
 import pl.edu.agh.petrinet.model.*;
 
-import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.html.ObjectView;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
@@ -32,20 +29,15 @@ public class PetriNetVisualizationViewer {
         visualizationViewer = new VisualizationViewer<>(new ISOMLayout<>(petriGraph.getGraph()));
         visualizationViewer.setBorder(new TitledBorder("Graf testowy"));
 
-        //DefaultModalGraphMouse<Object, Object> gm = new DefaultModalGraphMouse<>();
-        /*EditingModalGraphMouse<PetriVertex, PetriEdge> gm = new EditingModalGraphMouse<>(
-                visualizationViewer.getRenderContext(),
-                new PetriVertexFactory(petriGraph),
-                new PetriEdgeFactory(petriGraph));*/
-
-
         AbstractModalGraphMouse gm = new DefaultModalGraphMouse<PetriVertex, PetriEdge>();
+
         visualizationViewer.setGraphMouse(gm);
 
         gm.add(new PickingGraphMousePlugin<PetriVertex, PetriEdge>());
+        gm.add(new PetriNetEditingEdgeMousePlugin(new PetriEdgeFactory(petriGraph)));
         gm.add(new PetriNetGraphPopup(visualizationViewer, petriGraph));
 
-        gm.setMode(ModalGraphMouse.Mode.EDITING);
+        gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
 
         visualizationViewer.addKeyListener(gm.getModeKeyListener());
         visualizationViewer.setGraphMouse(gm);

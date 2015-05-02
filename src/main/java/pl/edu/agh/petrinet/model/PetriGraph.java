@@ -5,7 +5,10 @@ import edu.uci.ics.jung.graph.Graph;
 import pl.edu.agh.petrinet.algorithms.IncidenceMatrix;
 import pl.edu.agh.petrinet.algorithms.ReachabilityGraph;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.IntSummaryStatistics;
 
 public class PetriGraph {
 
@@ -154,6 +157,26 @@ public class PetriGraph {
             return transitions.get(i);
         }
         return null;
+    }
+
+    public int getPlacesSmallestUniqId(){
+        ArrayList<PetriPlace> sortedPlaces = new ArrayList<>(places.values());
+        sortedPlaces.sort((o1, o2) -> ((Integer)o1.getId()).compareTo(o2.getId()));
+
+        for(int i = 0; i < sortedPlaces.size(); i++){
+            if (sortedPlaces.get(i).getId() != i) return i;
+        }
+        return sortedPlaces.size();
+    }
+
+    public int getTransitionsSmallestUniqId(){
+        ArrayList<PetriTransition> sortedTransitions = new ArrayList<>(transitions.values());
+        sortedTransitions.sort((o1, o2) -> ((Integer)o1.getId()).compareTo(o2.getId()));
+
+        for(int i = 0; i < sortedTransitions.size(); i++){
+            if (sortedTransitions.get(i).getId() != i) return i;
+        }
+        return sortedTransitions.size();
     }
 
 }
