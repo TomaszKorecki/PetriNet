@@ -47,6 +47,10 @@ public class PetriGraph {
         return graph;
     }
 
+    public void setType(Type type){
+        this.type = type;
+    }
+
     public void setGraph(Graph<PetriVertex, PetriEdge> graph) {
         this.graph = graph;
     }

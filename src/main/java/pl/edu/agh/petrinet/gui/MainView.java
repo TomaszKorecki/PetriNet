@@ -2,14 +2,18 @@ package pl.edu.agh.petrinet.gui;
 
 import com.sun.deploy.panel.RadioPropertyGroup;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Separator;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -27,11 +31,15 @@ import java.awt.*;
 public class MainView extends Application {
     private Stage primaryStage;
     private BorderPane rootPane;
-
     private VBox leftPane;
     private StackPane centerPane;
-
     private SwingNode swingNode;
+    private Pane simulationPane;
+
+    TextField simulationDelayTextField;
+    RadioButton isSimulationAutomaticRadioButton;
+
+    private PetriNetVisualizationViewer petriNetVIsualizationViewer;
 
     public static void main(String[] args) {
         launch(args);
@@ -61,7 +69,7 @@ public class MainView extends Application {
         leftPane.setMinWidth(200);
 
         createPetriNetTypeMenu();
-
+        createSimulationMenu();
 
         rootPane.setLeft(leftPane);
     }
@@ -72,23 +80,91 @@ public class MainView extends Application {
 
     private void createPetriNetTypeMenu(){
         VBox petriNetTypePane = new VBox(5);
-        final ToggleGroup toggleGroup = new ToggleGroup();
-        RadioButton normalNetRadioButton = new RadioButton("Normal");
-        RadioButton priorityNetRadioButton = new RadioButton("Priority");
-        RadioButton timeNetRadioButton = new RadioButton("Time");
-        normalNetRadioButton.setToggleGroup(toggleGroup);
-        priorityNetRadioButton.setToggleGroup(toggleGroup);
-        timeNetRadioButton.setToggleGroup(toggleGroup);
-
-        normalNetRadioButton.setSelected(true);
 
         Text headerText = new Text("Petri Net type");
         Separator separator = new Separator();
         separator.setOrientation(Orientation.HORIZONTAL);
         separator.setMinHeight(2);
 
-        petriNetTypePane.getChildren().addAll(headerText, normalNetRadioButton, priorityNetRadioButton, timeNetRadioButton, separator);
+        final ToggleGroup toggleGroup = new ToggleGroup();
+        RadioButton defaultNetRadioButton = new RadioButton("Default");
+        RadioButton priorityNetRadioButton = new RadioButton("Priority");
+        RadioButton timeNetRadioButton = new RadioButton("Time");
+        defaultNetRadioButton.setToggleGroup(toggleGroup);
+        priorityNetRadioButton.setToggleGroup(toggleGroup);
+        timeNetRadioButton.setToggleGroup(toggleGroup);
+
+        defaultNetRadioButton.setSelected(true);
+
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == defaultNetRadioButton) {
+                petriNetVIsualizationViewer.getPetriGraph().setType(PetriGraph.Type.DEFAULT);
+            } else if (newValue == priorityNetRadioButton) {
+                petriNetVIsualizationViewer.getPetriGraph().setType(PetriGraph.Type.PRIORYTY);
+            } else if (newValue == timeNetRadioButton) {
+                petriNetVIsualizationViewer.getPetriGraph().setType(PetriGraph.Type.TIME);
+            }
+
+            refreshSimulationMenu();
+        });
+
+
+        petriNetTypePane.getChildren().addAll(headerText, defaultNetRadioButton, priorityNetRadioButton, timeNetRadioButton, separator);
         leftPane.getChildren().addAll(petriNetTypePane);
+    }
+
+    private void refreshSimulationMenu(){
+        leftPane.getChildren().remove(simulationPane);
+        createSimulationMenu();
+    }
+
+    private void createSimulationMenu(){
+        VBox petriSimulationMenu = new VBox(5);
+        simulationPane = petriSimulationMenu;
+
+        Text headerText = new Text("Simulation");
+        Separator separator = new Separator();
+        separator.setOrientation(Orientation.HORIZONTAL);
+        separator.setMinHeight(2);
+
+        Text delayText = new Text("Delay [ms]:");
+        simulationDelayTextField = new TextField();
+
+        simulationDelayTextField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    simulationDelayTextField.setText(oldValue);
+                }
+            }
+        });
+
+
+
+        HBox delayPane = new HBox();
+        delayPane.getChildren().addAll(delayText, simulationDelayTextField);
+        delayPane.setSpacing(10);
+
+        isSimulationAutomaticRadioButton = new RadioButton("Automatic");
+
+        Button runSimulationButton = new Button("Start");
+        runSimulationButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+
+        Button oneSimulationStepButton = new Button("One Step");
+        oneSimulationStepButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+
+        petriSimulationMenu.getChildren().addAll(headerText, delayPane, isSimulationAutomaticRadioButton,runSimulationButton, oneSimulationStepButton, separator);
+        leftPane.getChildren().addAll(petriSimulationMenu);
     }
 
 
@@ -102,7 +178,7 @@ public class MainView extends Application {
         fillDefaultGraph(petriGraph);
 
         swingNode = new SwingNode();
-        PetriNetVisualizationViewer petriNetVIsualizationViewer = new PetriNetVisualizationViewer(petriGraph);
+        petriNetVIsualizationViewer = new PetriNetVisualizationViewer(petriGraph);
 
         SwingUtilities.invokeLater(() -> swingNode.setContent(petriNetVIsualizationViewer.getVisualizationViewer()));
 

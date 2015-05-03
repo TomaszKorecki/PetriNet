@@ -33,7 +33,8 @@ public class PetriNetVisualizationViewer {
     private final Color VERTEX_COLOR = Color.lightGray;
     private final Color VERTEX_SELECTED_COLOR = Color.yellow;
     private final Color EDGE_LABEL_SELECTED_COLOR = Color.black;
-    private final int EDGES_LABEL_FONT_SIZE = 20;
+    private final int EDGES_LABEL_FONT_SIZE = 18;
+    private final int VERTICES_LABEL_FONT_SIZE = 18;
 
     private PetriGraph petriGraph;
     private VisualizationViewer<PetriVertex, PetriEdge> visualizationViewer;
@@ -59,20 +60,19 @@ public class PetriNetVisualizationViewer {
 
         visualizationViewer.getRenderContext().setVertexShapeTransformer(createVertexShapeTransformer());
         visualizationViewer.getRenderContext().setVertexFillPaintTransformer(createVertexFillPaintTransformer());
+        visualizationViewer.getRenderContext().setEdgeFontTransformer(createEdgeFontTransformer());
+        visualizationViewer.getRenderContext().setVertexFontTransformer(createVertexFontTransformer());
 
         visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<>());
         visualizationViewer.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<>());
 
-        visualizationViewer.getRenderContext().setEdgeFontTransformer(new Transformer<PetriEdge, Font>() {
-            @Override
-            public Font transform(PetriEdge petriEdge) {
-                return new Font("Default", 0, EDGES_LABEL_FONT_SIZE);
-            }
-        });
-
         visualizationViewer.getRenderContext().setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(EDGE_LABEL_SELECTED_COLOR, false));
 
         visualizationViewer.setPreferredSize(new Dimension(600, 400));
+    }
+
+    public PetriGraph getPetriGraph(){
+        return this.petriGraph;
     }
 
     private PickableVertexPaintTransformer<PetriVertex> createVertexFillPaintTransformer() {
@@ -92,6 +92,14 @@ public class PetriNetVisualizationViewer {
         };
     }
 
+    private Transformer<PetriEdge, Font> createEdgeFontTransformer() {
+        return petriEdge -> new Font("Default", 0, EDGES_LABEL_FONT_SIZE);
+    }
+
+    private Transformer<PetriVertex, Font> createVertexFontTransformer(){
+        return petriVertex -> new Font("Default", 0, VERTICES_LABEL_FONT_SIZE);
+    }
+
     public VisualizationViewer<PetriVertex, PetriEdge> getVisualizationViewer() {
         return this.visualizationViewer;
     }
@@ -107,8 +115,6 @@ public class PetriNetVisualizationViewer {
         public void keyTyped(KeyEvent event) {
             char keyChar = event.getKeyChar();
             int number;
-
-            System.out.println("Typed  " + keyChar);
 
             if (Character.isDigit(keyChar)) {
                 number = Character.getNumericValue(keyChar);
@@ -126,15 +132,17 @@ public class PetriNetVisualizationViewer {
 
             if (pickedEdges.length == 1 && pickedVertices.length == 0) {
                 PetriEdge pickedEdge = pickedEdges[0];
-                pickedEdge.setMarkersCount(number);
-                visualizationViewer.repaint();
-            } else if(pickedEdges.length == 0 && pickedVertices.length == 1){
+                if(number > 0){
+                    pickedEdge.setMarkersCount(number);
+                    visualizationViewer.repaint();
+                }
+            } else if (pickedEdges.length == 0 && pickedVertices.length == 1) {
                 PetriVertex pickedVertex = pickedVertices[0];
 
-                if(pickedVertex instanceof PetriPlace){
-                    ((PetriPlace)pickedVertex).setStartupMarkersCount(number);
-                } else if(pickedVertex instanceof PetriTransition){
-                    ((PetriTransition)pickedVertex).setSpecialTypeValue(number);
+                if (pickedVertex instanceof PetriPlace) {
+                    ((PetriPlace) pickedVertex).setStartupMarkersCount(number);
+                } else if (pickedVertex instanceof PetriTransition) {
+                    ((PetriTransition) pickedVertex).setSpecialTypeValue(number);
                 }
 
                 visualizationViewer.repaint();
