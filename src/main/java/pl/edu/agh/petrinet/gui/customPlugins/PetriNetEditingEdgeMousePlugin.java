@@ -6,7 +6,6 @@ package pl.edu.agh.petrinet.gui.customPlugins;
 //
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
-import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
@@ -15,7 +14,10 @@ import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractGraphMousePlugin;
 import edu.uci.ics.jung.visualization.util.ArrowFactory;
-import org.apache.commons.collections15.Factory;
+import pl.edu.agh.petrinet.model.PetriGraph;
+import pl.edu.agh.petrinet.model.PetriPlace;
+import pl.edu.agh.petrinet.model.PetriTransition;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -32,7 +34,7 @@ import java.awt.Shape;
 import javax.swing.JComponent;
 
 
-public class PetriNetEditingEdgeMousePlugin<PetriVertex, PetriEdge, E> extends AbstractGraphMousePlugin implements MouseListener, MouseMotionListener {
+public class PetriNetEditingEdgeMousePlugin<PetriVertex, PetriEdge> extends AbstractGraphMousePlugin implements MouseListener, MouseMotionListener {
     protected PetriVertex startVertex;
     protected Point2D down;
     protected CubicCurve2D rawEdge;
@@ -42,21 +44,22 @@ public class PetriNetEditingEdgeMousePlugin<PetriVertex, PetriEdge, E> extends A
     protected VisualizationServer.Paintable edgePaintable;
     protected VisualizationServer.Paintable arrowPaintable;
     protected EdgeType edgeIsDirected;
-    protected Factory<E> edgeFactory;
 
-    public PetriNetEditingEdgeMousePlugin(Factory<E> edgeFactory) {
-        this(16, edgeFactory);
+    private PetriGraph petriGraph;
+
+    public PetriNetEditingEdgeMousePlugin(PetriGraph petriGraph) {
+        this(16, petriGraph);
     }
 
-    public PetriNetEditingEdgeMousePlugin(int modifiers,Factory<E> edgeFactory) {
+    public PetriNetEditingEdgeMousePlugin(int modifiers, PetriGraph petriGraph) {
         super(modifiers);
         this.rawEdge = new CubicCurve2D.Float();
-        this.edgeFactory = edgeFactory;
         this.rawEdge.setCurve(0.0D, 0.0D, 0.33000001311302185D, 100.0D, 0.6600000262260437D, -50.0D, 1.0D, 0.0D);
         this.rawArrowShape = ArrowFactory.getNotchedArrow(20.0F, 16.0F, 8.0F);
         this.edgePaintable = new PetriNetEditingEdgeMousePlugin.EdgePaintable();
         this.arrowPaintable = new PetriNetEditingEdgeMousePlugin.ArrowPaintable();
         this.cursor = Cursor.getPredefinedCursor(1);
+        this.petriGraph = petriGraph;
     }
 
     public boolean checkModifiers(MouseEvent e) {
@@ -64,29 +67,29 @@ public class PetriNetEditingEdgeMousePlugin<PetriVertex, PetriEdge, E> extends A
     }
 
     public void mousePressed(MouseEvent e) {
-        if(this.checkModifiers(e)) {
-            VisualizationViewer<PetriVertex, PetriEdge> vv = (VisualizationViewer)e.getSource();
+        if (this.checkModifiers(e)) {
+            VisualizationViewer<PetriVertex, PetriEdge> vv = (VisualizationViewer) e.getSource();
             Point p = e.getPoint();
             GraphElementAccessor<PetriVertex, PetriEdge> pickSupport = vv.getPickSupport();
-            if(pickSupport != null) {
+            if (pickSupport != null) {
                 Graph graph = vv.getModel().getGraphLayout().getGraph();
-                if(graph instanceof DirectedGraph) {
+                if (graph instanceof DirectedGraph) {
                     this.edgeIsDirected = EdgeType.DIRECTED;
                 } else {
                     this.edgeIsDirected = EdgeType.UNDIRECTED;
                 }
 
                 final PetriVertex vertex = pickSupport.getVertex(vv.getGraphLayout(), p.getX(), p.getY());
-                if(vertex != null) {
+                if (vertex != null) {
                     this.startVertex = vertex;
                     this.down = e.getPoint();
                     this.transformEdgeShape(this.down, this.down);
                     vv.addPostRenderPaintable(this.edgePaintable);
-                    if((e.getModifiers() & 1) != 0 && !(vv.getModel().getGraphLayout().getGraph() instanceof UndirectedGraph)) {
+                    if ((e.getModifiers() & 1) != 0 && !(vv.getModel().getGraphLayout().getGraph() instanceof UndirectedGraph)) {
                         this.edgeIsDirected = EdgeType.DIRECTED;
                     }
 
-                    if(this.edgeIsDirected == EdgeType.DIRECTED) {
+                    if (this.edgeIsDirected == EdgeType.DIRECTED) {
                         this.transformArrowShape(this.down, e.getPoint());
                         vv.addPostRenderPaintable(this.arrowPaintable);
                     }
@@ -99,69 +102,72 @@ public class PetriNetEditingEdgeMousePlugin<PetriVertex, PetriEdge, E> extends A
     }
 
     public void mouseReleased(MouseEvent e) {
-        if(this.checkModifiers(e)) {
-            VisualizationViewer vv = (VisualizationViewer)e.getSource();
+        VisualizationViewer<PetriVertex, PetriEdge> vv = (VisualizationViewer) e.getSource();
+        if (this.checkModifiers(e)) {
             Point p = e.getPoint();
-            Layout layout = vv.getModel().getGraphLayout();
-            GraphElementAccessor pickSupport = vv.getPickSupport();
-            if(pickSupport != null) {
-                Object vertex = pickSupport.getVertex(layout, p.getX(), p.getY());
-                if(vertex != null && this.startVertex != null) {
-                    Graph graph = vv.getGraphLayout().getGraph();
-                    graph.addEdge(this.edgeFactory.create(), this.startVertex, vertex, this.edgeIsDirected);
-                    vv.repaint();
-                }
-            }
+            GraphElementAccessor<PetriVertex, PetriEdge> pickSupport = vv.getPickSupport();
+            if (pickSupport != null) {
+                PetriVertex endVertex = pickSupport.getVertex(vv.getGraphLayout(), p.getX(), p.getY());
 
-            this.startVertex = null;
-            this.down = null;
-            this.edgeIsDirected = EdgeType.UNDIRECTED;
-            vv.removePostRenderPaintable(this.edgePaintable);
-            vv.removePostRenderPaintable(this.arrowPaintable);
+                if (endVertex != null && this.startVertex != null) {
+                    if (startVertex instanceof PetriPlace && endVertex instanceof PetriTransition) {
+                        petriGraph.addEdge((PetriPlace) startVertex, (PetriTransition) endVertex);
+                    } else if (endVertex instanceof PetriPlace && startVertex instanceof PetriTransition) {
+                        petriGraph.addEdge((PetriTransition) startVertex, (PetriPlace) endVertex);
+                    }
+                }
+
+                vv.repaint();
+            }
         }
 
+        this.startVertex = null;
+        this.down = null;
+        this.edgeIsDirected = EdgeType.UNDIRECTED;
+        vv.removePostRenderPaintable(this.edgePaintable);
+        vv.removePostRenderPaintable(this.arrowPaintable);
     }
 
     public void mouseDragged(MouseEvent e) {
-        if(this.checkModifiers(e)) {
-            if(this.startVertex != null) {
+        if (this.checkModifiers(e)) {
+            if (this.startVertex != null) {
                 this.transformEdgeShape(this.down, e.getPoint());
-                if(this.edgeIsDirected == EdgeType.DIRECTED) {
+                if (this.edgeIsDirected == EdgeType.DIRECTED) {
                     this.transformArrowShape(this.down, e.getPoint());
                 }
             }
 
-            VisualizationViewer vv = (VisualizationViewer)e.getSource();
+            VisualizationViewer vv = (VisualizationViewer) e.getSource();
             vv.repaint();
         }
 
     }
 
     private void transformEdgeShape(Point2D down, Point2D out) {
-        float x1 = (float)down.getX();
-        float y1 = (float)down.getY();
-        float x2 = (float)out.getX();
-        float y2 = (float)out.getY();
-        AffineTransform xform = AffineTransform.getTranslateInstance((double)x1, (double)y1);
+        float x1 = (float) down.getX();
+        float y1 = (float) down.getY();
+        float x2 = (float) out.getX();
+        float y2 = (float) out.getY();
+        AffineTransform xform = AffineTransform.getTranslateInstance((double) x1, (double) y1);
         float dx = x2 - x1;
         float dy = y2 - y1;
-        float thetaRadians = (float)Math.atan2((double)dy, (double)dx);
-        xform.rotate((double)thetaRadians);
-        float dist = (float)Math.sqrt((double)(dx * dx + dy * dy));
-        xform.scale((double)dist / this.rawEdge.getBounds().getWidth(), 1.0D);
+        float thetaRadians = (float) Math.atan2((double) dy, (double) dx);
+        xform.rotate((double) thetaRadians);
+        float dist = (float) Math.sqrt((double) (dx * dx + dy * dy));
+        xform.scale((double) dist / this.rawEdge.getBounds().getWidth(), 1.0D);
         this.edgeShape = xform.createTransformedShape(this.rawEdge);
     }
 
     private void transformArrowShape(Point2D down, Point2D out) {
-        float x1 = (float)down.getX();
-        float y1 = (float)down.getY();
-        float x2 = (float)out.getX();
-        float y2 = (float)out.getY();
-        AffineTransform xform = AffineTransform.getTranslateInstance((double)x2, (double)y2);
+        float x1 = (float) down.getX();
+        float y1 = (float) down.getY();
+        float x2 = (float) out.getX();
+        float y2 = (float) out.getY();
+        AffineTransform xform = AffineTransform.getTranslateInstance((double) x2, (double) y2);
         float dx = x2 - x1;
         float dy = y2 - y1;
-        float thetaRadians = (float)Math.atan2((double)dy, (double)dx);
-        xform.rotate((double)thetaRadians);
+        float thetaRadians = (float) Math.atan2((double) dy, (double) dx);
+        xform.rotate((double) thetaRadians);
         this.arrowShape = xform.createTransformedShape(this.rawArrowShape);
     }
 
@@ -169,12 +175,12 @@ public class PetriNetEditingEdgeMousePlugin<PetriVertex, PetriEdge, E> extends A
     }
 
     public void mouseEntered(MouseEvent e) {
-        JComponent c = (JComponent)e.getSource();
+        JComponent c = (JComponent) e.getSource();
         c.setCursor(this.cursor);
     }
 
     public void mouseExited(MouseEvent e) {
-        JComponent c = (JComponent)e.getSource();
+        JComponent c = (JComponent) e.getSource();
         c.setCursor(Cursor.getPredefinedCursor(0));
     }
 
@@ -186,10 +192,10 @@ public class PetriNetEditingEdgeMousePlugin<PetriVertex, PetriEdge, E> extends A
         }
 
         public void paint(Graphics g) {
-            if(PetriNetEditingEdgeMousePlugin.this.arrowShape != null) {
+            if (PetriNetEditingEdgeMousePlugin.this.arrowShape != null) {
                 Color oldColor = g.getColor();
                 g.setColor(Color.black);
-                ((Graphics2D)g).fill(PetriNetEditingEdgeMousePlugin.this.arrowShape);
+                ((Graphics2D) g).fill(PetriNetEditingEdgeMousePlugin.this.arrowShape);
                 g.setColor(oldColor);
             }
 
@@ -205,10 +211,10 @@ public class PetriNetEditingEdgeMousePlugin<PetriVertex, PetriEdge, E> extends A
         }
 
         public void paint(Graphics g) {
-            if(PetriNetEditingEdgeMousePlugin.this.edgeShape != null) {
+            if (PetriNetEditingEdgeMousePlugin.this.edgeShape != null) {
                 Color oldColor = g.getColor();
                 g.setColor(Color.black);
-                ((Graphics2D)g).draw(PetriNetEditingEdgeMousePlugin.this.edgeShape);
+                ((Graphics2D) g).draw(PetriNetEditingEdgeMousePlugin.this.edgeShape);
                 g.setColor(oldColor);
             }
 
