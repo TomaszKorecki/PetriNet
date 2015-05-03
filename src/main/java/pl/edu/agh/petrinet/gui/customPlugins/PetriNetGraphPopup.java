@@ -75,7 +75,7 @@ public class PetriNetGraphPopup extends AbstractPopupGraphMousePlugin implements
                 visualizationViewer.repaint();
             }
         });
-        
+
         return abstractActions.toArray(new AbstractAction[abstractActions.size()]);
     }
 

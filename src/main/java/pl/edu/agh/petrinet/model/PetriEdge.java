@@ -61,13 +61,17 @@ public class PetriEdge {
 
     public void setMarkersCount(int markersCount) {this.markersCount = markersCount;}
 
-    @Override
-    public String toString() {
-        return "PetriEdge{" +
-                "v1=" + v1 +
-                ", v2=" + v2 +
-                ", name='" + name + '\'' +
-                ", markers=" + markersCount +
-                '}';
+//    @Override
+//    public String toString() {
+//        return "PetriEdge{" +
+//                "v1=" + v1 +
+//                ", v2=" + v2 +
+//                ", name='" + name + '\'' +
+//                ", markers=" + markersCount +
+//                '}';
+//    }
+
+    public String toString(){
+        return markersCount == 1 ? "" : new Integer(markersCount).toString();
     }
 }

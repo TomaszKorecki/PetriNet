@@ -26,23 +26,33 @@ public class PetriPlace extends PetriVertex {
         this.marksersCount = this.startupMarkersCount = startupMarkersCount;
     }
 
-    public int getMarksersCount(){
+    public int getMarksersCount() {
         return this.marksersCount;
     }
 
-    public int changeMarkersCount(int i){
+    public int changeMarkersCount(int i) {
         return marksersCount += i;
     }
 
-    public void resetMarkersCount(){
+    public void resetMarkersCount() {
         marksersCount = startupMarkersCount;
     }
 
+    public void setStartupMarkersCount(int i) {
+        this.startupMarkersCount = i;
+        resetMarkersCount();
+    }
+
+    //    @Override
+//    public String toString() {
+//        return "PetriPlace{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                '}';
+//    }
+
     @Override
     public String toString() {
-        return "PetriPlace{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return name + "   " + marksersCount;
     }
 }

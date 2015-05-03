@@ -1,7 +1,6 @@
 package pl.edu.agh.petrinet.model;
 
 
-
 public class PetriTransition extends PetriVertex {
 
     private int specialTypeValue;
@@ -19,7 +18,7 @@ public class PetriTransition extends PetriVertex {
         super(id);
         this.type = type;
         this.specialTypeValue = stv;
-        if(type == PetriGraph.Type.TIME){
+        if (type == PetriGraph.Type.TIME) {
             currentTimeForTimePetriNet = stv;
         }
     }
@@ -33,46 +32,59 @@ public class PetriTransition extends PetriVertex {
         super(id, name);
         this.type = type;
         this.specialTypeValue = stv;
-        if(type == PetriGraph.Type.TIME){
+        if (type == PetriGraph.Type.TIME) {
             currentTimeForTimePetriNet = stv;
         }
     }
 
-    public int getPriority(){
-        if(type == PetriGraph.Type.PRIORYTY){
+    public void setSpecialTypeValue(int stv) {
+        this.specialTypeValue = stv;
+
+        if (type == PetriGraph.Type.TIME) {
+            currentTimeForTimePetriNet = stv;
+        }
+    }
+
+    public int getPriority() {
+        if (type == PetriGraph.Type.PRIORYTY) {
             return specialTypeValue;
         }
         return 0;
     }
 
-    public int getTime(){
-        if(type == PetriGraph.Type.TIME){
+    public int getTime() {
+        if (type == PetriGraph.Type.TIME) {
             return specialTypeValue;
         }
         return 0;
     }
 
-    public void decreaseTime(int time){
-        if(type == PetriGraph.Type.TIME){
+    public void decreaseTime(int time) {
+        if (type == PetriGraph.Type.TIME) {
             currentTimeForTimePetriNet -= time;
-            if(currentTimeForTimePetriNet <= 0){
+            if (currentTimeForTimePetriNet <= 0) {
                 currentTimeForTimePetriNet = specialTypeValue;
             }
         }
     }
 
-    public int getCurrentTime(){
-        if(type == PetriGraph.Type.TIME){
+    public int getCurrentTime() {
+        if (type == PetriGraph.Type.TIME) {
             return currentTimeForTimePetriNet;
         }
         return 0;
     }
 
+    //    @Override
+//    public String toString() {
+//        return "PetriTransition{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                '}';
+//    }
+
     @Override
     public String toString() {
-        return "PetriTransition{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return name + "   " + specialTypeValue;
     }
 }
