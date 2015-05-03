@@ -6,7 +6,6 @@ import edu.uci.ics.jung.visualization.control.*;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization3d.decorators.PickableVertexPaintTransformer;
 import org.apache.commons.collections15.Transformer;
-import pl.edu.agh.petrinet.gui.customPlugins.PetriNetEditingEdgeMousePlugin;
 import pl.edu.agh.petrinet.gui.customPlugins.PetriNetGraphPopup;
 import pl.edu.agh.petrinet.gui.customPlugins.PetriNetModalGraphMouse;
 import pl.edu.agh.petrinet.model.*;
@@ -49,6 +48,8 @@ public class PetriNetVisualizationViewer {
 
         visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<>());
         visualizationViewer.setPreferredSize(new Dimension(600, 400));
+
+
     }
 
     private PickableVertexPaintTransformer<PetriVertex> createVertexFillPaintTransformer() {

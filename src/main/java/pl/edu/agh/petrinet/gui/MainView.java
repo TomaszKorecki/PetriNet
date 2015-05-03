@@ -1,23 +1,36 @@
 package pl.edu.agh.petrinet.gui;
 
+import com.sun.deploy.panel.RadioPropertyGroup;
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
+import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Separator;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import pl.edu.agh.petrinet.model.*;
 
 import javax.swing.*;
+import javax.swing.plaf.SeparatorUI;
+import java.awt.*;
 
 
 public class MainView extends Application {
     private Stage primaryStage;
     private BorderPane rootPane;
-    private StackPane topPane;
+
+    private VBox leftPane;
     private StackPane centerPane;
+
     private SwingNode swingNode;
 
     public static void main(String[] args) {
@@ -35,10 +48,47 @@ public class MainView extends Application {
      */
     private void createMenuStructure(Stage primaryStage){
         rootPane = new BorderPane();
+        createLeftPane();
         createCenterPane();
         primaryStage.setTitle("Petri Net Editor");
         primaryStage.setScene(new Scene(rootPane, 900, 640));
         primaryStage.show();
+    }
+
+    private void createLeftPane(){
+        leftPane = new VBox(10);
+        leftPane.setPadding(new Insets(10, 10, 10, 10));
+        leftPane.setMinWidth(200);
+
+        createPetriNetTypeMenu();
+
+
+        rootPane.setLeft(leftPane);
+    }
+
+    private void createHandleToolMenu(){
+
+    }
+
+    private void createPetriNetTypeMenu(){
+        VBox petriNetTypePane = new VBox(5);
+        final ToggleGroup toggleGroup = new ToggleGroup();
+        RadioButton normalNetRadioButton = new RadioButton("Normal");
+        RadioButton priorityNetRadioButton = new RadioButton("Priority");
+        RadioButton timeNetRadioButton = new RadioButton("Time");
+        normalNetRadioButton.setToggleGroup(toggleGroup);
+        priorityNetRadioButton.setToggleGroup(toggleGroup);
+        timeNetRadioButton.setToggleGroup(toggleGroup);
+
+        normalNetRadioButton.setSelected(true);
+
+        Text headerText = new Text("Petri Net type");
+        Separator separator = new Separator();
+        separator.setOrientation(Orientation.HORIZONTAL);
+        separator.setMinHeight(2);
+
+        petriNetTypePane.getChildren().addAll(headerText, normalNetRadioButton, priorityNetRadioButton, timeNetRadioButton, separator);
+        leftPane.getChildren().addAll(petriNetTypePane);
     }
 
 
