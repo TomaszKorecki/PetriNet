@@ -45,17 +45,14 @@ public class PetriNetGraphPopup extends AbstractPopupGraphMousePlugin implements
             AbstractAction[] actions = new AbstractAction[0];
 
             if(petriVertex != null){
-                System.out.println("it's vertex!");
                 if(petriVertex instanceof PetriPlace){
                     actions = createActionsForPlace((PetriPlace)petriVertex);
                 }else if(petriVertex instanceof  PetriTransition){
                     actions = createActionsForTransition((PetriTransition)petriVertex);
                 }
             } else if(petriEdge != null){
-                System.out.println("it's edge!");
                 actions = createActionsForEdge(petriEdge);
             } else{
-                System.out.println("it's nothing!");
                 actions = createDefaultActions(mouseEvent);
             }
 

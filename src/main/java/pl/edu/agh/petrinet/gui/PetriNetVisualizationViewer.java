@@ -4,6 +4,7 @@ import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.*;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization3d.decorators.PickableVertexPaintTransformer;
 import org.apache.commons.collections15.Transformer;
 import pl.edu.agh.petrinet.gui.customPlugins.PetriNetEditingEdgeMousePlugin;
 import pl.edu.agh.petrinet.gui.customPlugins.PetriNetGraphPopup;
@@ -19,10 +20,11 @@ import java.awt.geom.Rectangle2D;
  * Created by Tomasz on 5/2/2015.
  */
 public class PetriNetVisualizationViewer {
+    private final Color VERTEX_COLOR = Color.lightGray;
+    private final Color VERTEX_SELECTED_COLOR = Color.yellow;
 
-
-    PetriGraph petriGraph;
-    VisualizationViewer<PetriVertex, PetriEdge> visualizationViewer;
+    private PetriGraph petriGraph;
+    private VisualizationViewer<PetriVertex, PetriEdge> visualizationViewer;
 
     public PetriNetVisualizationViewer(PetriGraph petriGraph) {
         this.petriGraph = petriGraph;
@@ -41,15 +43,19 @@ public class PetriNetVisualizationViewer {
         visualizationViewer.addKeyListener(gm.getModeKeyListener());
         visualizationViewer.setGraphMouse(gm);
 
-        visualizationViewer.getRenderContext().setVertexFillPaintTransformer(createVertexFillPaintTransformer());
+
         visualizationViewer.getRenderContext().setVertexShapeTransformer(createVertexShapeTransformer());
+        visualizationViewer.getRenderContext().setVertexFillPaintTransformer(createVertexFillPaintTransformer());
 
         visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<>());
         visualizationViewer.setPreferredSize(new Dimension(600, 400));
     }
 
-    private Transformer<PetriVertex, Paint> createVertexFillPaintTransformer() {
-        return petriVertex -> Color.lightGray;
+    private PickableVertexPaintTransformer<PetriVertex> createVertexFillPaintTransformer() {
+        return new PickableVertexPaintTransformer<PetriVertex>(
+                visualizationViewer.getPickedVertexState(),
+                VERTEX_COLOR,
+                VERTEX_SELECTED_COLOR);
     }
 
     private Transformer<PetriVertex, Shape> createVertexShapeTransformer() {
