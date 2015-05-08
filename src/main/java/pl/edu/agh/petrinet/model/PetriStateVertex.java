@@ -5,23 +5,42 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by rakiop on 26.04.15.
+ * Vertex of Reachability/Coverability Petri Graph
  */
 public class PetriStateVertex {
 
+    /**
+     * Current Petri Graph status
+     */
     private int[] placeStatus;
 
+    /**
+     * Level of vertex
+     */
     private int level;
 
+    /**
+     * Route from root of this graph
+     */
     private List<Integer> route;
 
-
+    /**
+     * Contructor
+     * @param status    current status
+     * @param level     current level
+     */
     public PetriStateVertex(int[] status, int level){
         this.placeStatus = status;
         this.level = level;
         route = new LinkedList<>();
     }
 
+    /**
+     * Constructor
+     * @param status    current status
+     * @param level     current level
+     * @param route     route from root
+     */
     public PetriStateVertex(int[] status, int level, List<Integer> route){
         this.placeStatus = status;
         this.level = level;
@@ -32,26 +51,52 @@ public class PetriStateVertex {
         }
     }
 
+    /**
+     * Get current level
+     * @return  current level
+     */
     public int getLevel(){
         return this.level;
     }
 
+    /**
+     * Get status of *i* petri net place
+     * @param i     id of petri net place
+     * @return      numbers of marks
+     */
     public int getPlaceMarksCount(int i){
         return placeStatus[i];
     }
 
+    /**
+     * Get current petri net status
+     * @return  current petri net status
+     */
     public int[] getPlaceMarksCounts(){
         return placeStatus;
     }
 
+    /**
+     * Add next transition to route
+     * @param tId   transition id
+     */
     public void addToRoute(int tId){
         route.add(tId);
     }
 
+    /**
+     * Get route to this state
+     * @return
+     */
     public List<Integer> getRoute(){
         return route;
     }
 
+    /**
+     * Check for equality with another state
+     * @param obj   PetriStateVertex object
+     * @return      Is equal or not
+     */
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof PetriStateVertex == false)
@@ -65,6 +110,10 @@ public class PetriStateVertex {
         return true;
     }
 
+    /**
+     * Print current status
+     * @return
+     */
     @Override
     public String toString() {
         return Arrays.toString(this.placeStatus);
