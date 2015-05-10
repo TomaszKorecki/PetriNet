@@ -1,5 +1,6 @@
 package test;
 
+import pl.edu.agh.petrinet.algorithms.Attributes;
 import pl.edu.agh.petrinet.model.PetriGraph;
 import pl.edu.agh.petrinet.model.PetriPlace;
 import pl.edu.agh.petrinet.model.PetriTransition;
@@ -14,9 +15,12 @@ import java.util.Random;
  */
 public class SimulateDefault {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         PetriGraph graph = createGraph();
         graph.compute();
+
+        Attributes attributes = new Attributes(graph);
+        System.out.println(attributes);
 
         DefaultSimulation sim = new DefaultSimulation(graph);
 
@@ -26,8 +30,8 @@ public class SimulateDefault {
         List<Integer> transitions;
         Random r = new Random();
         int transition;
-        for(int i = 0; i < 15; i++){
-            if(sim.isSimulationEnded()){
+        for (int i = 0; i < 15; i++) {
+            if (sim.isSimulationEnded()) {
                 break;
             }
 
@@ -38,12 +42,13 @@ public class SimulateDefault {
             System.out.println(Arrays.toString(graph.getCurrentState()));
         }
 
-        try{
+        try {
             System.in.read();
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
-    private static PetriGraph createGraph(){
+    private static PetriGraph createGraph() {
         PetriGraph graph = new PetriGraph();
         PetriPlace v1 = new PetriPlace(0, "PP0", 1);
         PetriPlace v2 = new PetriPlace(1, "PP1");

@@ -29,8 +29,9 @@ public class PetriTransition extends PetriVertex {
 
     /**
      * Constructor
-     * @param id        ID of Transition
-     * @param type      Graph type
+     *
+     * @param id   ID of Transition
+     * @param type Graph type
      */
     public PetriTransition(int id, PetriGraph.Type type) {
         super(id);
@@ -39,9 +40,10 @@ public class PetriTransition extends PetriVertex {
 
     /**
      * Constructor
-     * @param id        ID of Transition
-     * @param type      Graph type
-     * @param stv       Special value (Priority or Time)
+     *
+     * @param id   ID of Transition
+     * @param type Graph type
+     * @param stv  Special value (Priority or Time)
      */
     public PetriTransition(int id, PetriGraph.Type type, int stv) {
         super(id);
@@ -54,9 +56,10 @@ public class PetriTransition extends PetriVertex {
 
     /**
      * Constructor
-     * @param id        ID of Transition
-     * @param type      Graph type
-     * @param name      Name of vertex
+     *
+     * @param id   ID of Transition
+     * @param type Graph type
+     * @param name Name of vertex
      */
     public PetriTransition(int id, PetriGraph.Type type, String name) {
         super(id, name);
@@ -65,10 +68,11 @@ public class PetriTransition extends PetriVertex {
 
     /**
      * Constructor
-     * @param id        ID of Transition
-     * @param type      Graph type
-     * @param name      Name of vertex
-     * @param stv       Special value (Priority or Time)
+     *
+     * @param id   ID of Transition
+     * @param type Graph type
+     * @param name Name of vertex
+     * @param stv  Special value (Priority or Time)
      */
     public PetriTransition(int id, PetriGraph.Type type, String name, int stv) {
         super(id, name);
@@ -79,22 +83,24 @@ public class PetriTransition extends PetriVertex {
         }
     }
 
-    public PetriTransition(@Attribute(name="ID") int id, @Attribute(name="TimeOrPriority") int specialTypeValue){
+    public PetriTransition(@Attribute(name = "ID") int id, @Attribute(name = "TimeOrPriority") int specialTypeValue) {
         super(id);
         this.specialTypeValue = specialTypeValue;
     }
 
     /**
      * Set Graph type
+     *
      * @param type
      */
-    public void setType(PetriGraph.Type type){
+    public void setType(PetriGraph.Type type) {
         this.type = type;
     }
 
     /**
      * Set Priority/Time for this transition
-     * @param stv       value
+     *
+     * @param stv value
      */
     public void setSpecialTypeValue(int stv) {
         this.specialTypeValue = stv;
@@ -106,6 +112,7 @@ public class PetriTransition extends PetriVertex {
 
     /**
      * Get priority of this transition
+     *
      * @return
      */
     public int getPriority() {
@@ -117,6 +124,7 @@ public class PetriTransition extends PetriVertex {
 
     /**
      * Get full execution time of this transition
+     *
      * @return
      */
     public int getTime() {
@@ -129,7 +137,8 @@ public class PetriTransition extends PetriVertex {
 
     /**
      * Change current execution time of this transition
-     * @param time      time difference
+     *
+     * @param time time difference
      */
     public void decreaseTime(int time) {
         if (type == PetriGraph.Type.TIME) {
@@ -142,7 +151,8 @@ public class PetriTransition extends PetriVertex {
 
     /**
      * Get left execution time
-     * @return  time
+     *
+     * @return time
      */
     public int getCurrentTime() {
         if (type == PetriGraph.Type.TIME) {
@@ -150,14 +160,6 @@ public class PetriTransition extends PetriVertex {
         }
         return 0;
     }
-
-    //    @Override
-//    public String toString() {
-//        return "PetriTransition{" +
-//                "id=" + id +
-//                ", name='" + name + '\'' +
-//                '}';
-//    }
 
     @Override
     public String toString() {
