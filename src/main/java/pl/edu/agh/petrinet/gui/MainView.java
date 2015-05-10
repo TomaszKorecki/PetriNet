@@ -23,16 +23,19 @@ import javax.swing.*;
 public class MainView extends Application {
     private Stage primaryStage;
     private BorderPane rootPane;
+
     private VBox leftPane;
     private StackPane centerPane;
+    private Pane bottomPane;
+
     private SwingNode swingNode;
     private Pane simulationPane;
 
     private PetriGraph petriGraph;
 
-
-
     private PetriNetVisualizationViewer petriNetVIsualizationViewer;
+
+    private SimulationGUI simulationGUI;
 
     public static void main(String[] args) {
         launch(args);
@@ -41,6 +44,10 @@ public class MainView extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+
+        petriGraph = PetriGraphUtils.createTestPetriGraph();
+        petriNetVIsualizationViewer = new PetriNetVisualizationViewer(petriGraph);
+
         createMenuStructure(primaryStage);
     }
 
@@ -49,31 +56,49 @@ public class MainView extends Application {
      */
     private void createMenuStructure(Stage primaryStage){
         rootPane = new BorderPane();
-        createLeftPane();
         createCenterPane();
+        createLeftPane();
+        createBottomPane();
         primaryStage.setTitle("Petri Net Editor");
         primaryStage.setScene(new Scene(rootPane, 900, 640));
         primaryStage.show();
     }
 
+
+    /*
+    Creates left pane with simulation gui
+     */
     private void createLeftPane(){
         leftPane = new VBox(10);
         leftPane.setPadding(new Insets(10, 10, 10, 10));
         leftPane.setMinWidth(200);
 
-        createPetriNetTypeMenu();
+        simulationGUI = new SimulationGUI(petriNetVIsualizationViewer);
+        simulationPane = simulationGUI.getNewSimulationPane();
 
-        simulationPane = new  SimulationGUI(petriGraph).getSimulationPane();
-        leftPane.getChildren().addAll(simulationPane);
-
+        leftPane.getChildren().addAll(createPetriNetTypeMenu(), simulationPane);
         rootPane.setLeft(leftPane);
     }
 
-    private void createHandleToolMenu(){
+    /*
+   Creates pane for JUNG's Graph
+    */
+    private void createCenterPane() {
+        centerPane = new StackPane();
 
+        swingNode = new SwingNode();
+        SwingUtilities.invokeLater(() -> swingNode.setContent(petriNetVIsualizationViewer.getVisualizationViewer()));
+
+        centerPane.getChildren().add(swingNode);
+        rootPane.setCenter(centerPane);
     }
 
-    private void createPetriNetTypeMenu(){
+    private void createBottomPane(){
+        rootPane.setBottom(simulationGUI.getSimulationConsole());
+    }
+
+
+    private Pane createPetriNetTypeMenu(){
         VBox petriNetTypePane = new VBox(5);
 
         Text headerText = new Text("Petri Net type");
@@ -105,29 +130,15 @@ public class MainView extends Application {
 
 
         petriNetTypePane.getChildren().addAll(headerText, defaultNetRadioButton, priorityNetRadioButton, timeNetRadioButton, separator);
-        leftPane.getChildren().addAll(petriNetTypePane);
+
+        return petriNetTypePane;
     }
 
     private void refreshSimulationMenu(){
         leftPane.getChildren().remove(simulationPane);
-        simulationPane = new  SimulationGUI(petriGraph).getSimulationPane();
+        simulationPane = simulationGUI.getNewSimulationPane();
         leftPane.getChildren().addAll(simulationPane);
     }
 
-    /*
-    Creates pane for JUNG's Graph
-     */
-    private void createCenterPane() {
-        centerPane = new StackPane();
 
-        petriGraph = PetriGraphUtils.createTestPetriGraph();
-
-        swingNode = new SwingNode();
-        petriNetVIsualizationViewer = new PetriNetVisualizationViewer(petriGraph);
-
-        SwingUtilities.invokeLater(() -> swingNode.setContent(petriNetVIsualizationViewer.getVisualizationViewer()));
-
-        centerPane.getChildren().add(swingNode);
-        rootPane.setCenter(centerPane);
-    }
 }
