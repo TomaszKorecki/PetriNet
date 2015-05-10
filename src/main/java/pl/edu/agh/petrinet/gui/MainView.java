@@ -58,6 +58,7 @@ public class MainView extends Application {
         rootPane = new BorderPane();
         createCenterPane();
         createLeftPane();
+        createRightPane();
         createBottomPane();
         primaryStage.setTitle("Petri Net Editor");
         primaryStage.setScene(new Scene(rootPane, 900, 640));
@@ -78,6 +79,10 @@ public class MainView extends Application {
 
         leftPane.getChildren().addAll(createPetriNetTypeMenu(), simulationPane);
         rootPane.setLeft(leftPane);
+    }
+
+    private void createRightPane(){
+        rootPane.setRight(new ArchivingGUI(petriNetVIsualizationViewer).getArchivingPane());
     }
 
     /*

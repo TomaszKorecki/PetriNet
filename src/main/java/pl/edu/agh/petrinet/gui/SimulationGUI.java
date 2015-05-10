@@ -17,10 +17,9 @@ import java.util.Random;
 
 
 public class SimulationGUI {
-    private TextField simulationDelayTextField;
+    //private TextField simulationDelayTextField;
     private RadioButton isSimulationAutomaticRadioButton;
     private Pane simulationPane;
-
 
     private PetriNetVisualizationViewer petriNetVisualizationViewer;
     private PetriGraph petriGraph;
@@ -62,19 +61,19 @@ public class SimulationGUI {
         separator.setOrientation(Orientation.HORIZONTAL);
         separator.setMinHeight(2);
 
-        Text delayText = new Text("Delay [s]:");
-        simulationDelayTextField = new TextField();
-        simulationDelayTextField.setPromptText("1");
+//        Text delayText = new Text("Delay [s]:");
+//        simulationDelayTextField = new TextField();
+//        simulationDelayTextField.setPromptText("1");
 
-        simulationDelayTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                simulationDelayTextField.setText(oldValue);
-            }
-        });
+//        simulationDelayTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+//            if (!newValue.matches("\\d*")) {
+//                simulationDelayTextField.setText(oldValue);
+//            }
+//        });
 
-        HBox delayPane = new HBox();
-        delayPane.getChildren().addAll(delayText, simulationDelayTextField);
-        delayPane.setSpacing(10);
+//        HBox delayPane = new HBox();
+//        delayPane.getChildren().addAll(delayText, simulationDelayTextField);
+//        delayPane.setSpacing(10);
 
         isSimulationAutomaticRadioButton = new RadioButton("Automatic");
         isSimulationAutomaticRadioButton.setSelected(true);
@@ -87,7 +86,7 @@ public class SimulationGUI {
             endManualSimulation();
         });
 
-        petriSimulationMenu.getChildren().addAll(headerText, delayPane, isSimulationAutomaticRadioButton, runSimulationButton, oneSimulationStepButton, separator);
+        petriSimulationMenu.getChildren().addAll(headerText, isSimulationAutomaticRadioButton, runSimulationButton, oneSimulationStepButton, separator);
 
         createConsole();
     }
