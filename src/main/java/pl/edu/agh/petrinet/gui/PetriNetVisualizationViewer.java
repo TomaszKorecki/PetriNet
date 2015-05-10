@@ -5,6 +5,7 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.picking.PickedInfo;
 import edu.uci.ics.jung.visualization.renderers.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization3d.decorators.PickableVertexPaintTransformer;
 import org.apache.commons.collections15.Transformer;
@@ -19,18 +20,28 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by Tomasz on 5/2/2015.
  */
 public class PetriNetVisualizationViewer {
     private final Color VERTEX_COLOR = Color.lightGray;
     private final Color VERTEX_SELECTED_COLOR = Color.yellow;
+
+    private final Color VERTEX_SIMULATION_COLOR = Color.white;
+    private final Color VERTEX_SIMULATION_HIGHLIGHTED_COLOR = Color.yellow;
+
     private final Color EDGE_LABEL_SELECTED_COLOR = Color.black;
     private final int EDGES_LABEL_FONT_SIZE = 18;
     private final int VERTICES_LABEL_FONT_SIZE = 18;
 
     private PetriGraph petriGraph;
     private VisualizationViewer<PetriVertex, PetriEdge> visualizationViewer;
+
+    //For simulation purpose
+    private List<Integer> highlightedTransitions;
 
     public PetriNetVisualizationViewer(PetriGraph petriGraph) {
         this.petriGraph = petriGraph;
@@ -68,11 +79,41 @@ public class PetriNetVisualizationViewer {
         return this.petriGraph;
     }
 
+    public VisualizationViewer<PetriVertex, PetriEdge> getVisualizationViewer() {
+        return this.visualizationViewer;
+    }
+
+    public void enterSimulationMode(){
+        highlightedTransitions = new LinkedList<>();
+        visualizationViewer.getRenderContext().setVertexFillPaintTransformer(createSimulationVertexFillPaintTransformer());
+        visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<>());
+    }
+
+    public void exitSimulationMode(){
+        visualizationViewer.getRenderContext().setVertexFillPaintTransformer(createVertexFillPaintTransformer());
+        visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<>());
+    }
+
+    public void setHighlightedTransitions(List<Integer> highlightedTransitions){
+        this.highlightedTransitions = highlightedTransitions;
+    }
+
+
     private PickableVertexPaintTransformer<PetriVertex> createVertexFillPaintTransformer() {
         return new PickableVertexPaintTransformer<PetriVertex>(
                 visualizationViewer.getPickedVertexState(),
                 VERTEX_COLOR,
                 VERTEX_SELECTED_COLOR);
+    }
+
+    private Transformer<PetriVertex, Paint> createSimulationVertexFillPaintTransformer(){
+        return (PetriVertex petriVertex) -> {
+            if ((petriVertex instanceof PetriTransition) && highlightedTransitions.contains(petriVertex.getId()))
+                return VERTEX_SIMULATION_HIGHLIGHTED_COLOR;
+            else{
+                return VERTEX_SIMULATION_COLOR;
+            }
+        };
     }
 
     private Transformer<PetriVertex, Shape> createVertexShapeTransformer() {
@@ -93,9 +134,9 @@ public class PetriNetVisualizationViewer {
         return petriVertex -> new Font("Default", 0, VERTICES_LABEL_FONT_SIZE);
     }
 
-    public VisualizationViewer<PetriVertex, PetriEdge> getVisualizationViewer() {
-        return this.visualizationViewer;
-    }
+
+
+
 
     private class PetriNetKeyAdapter extends KeyAdapter {
         private PetriGraph petriGraph;

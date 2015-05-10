@@ -1,14 +1,14 @@
 package pl.edu.agh.petrinet.gui;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import pl.edu.agh.petrinet.model.PetriGraph;
+import pl.edu.agh.petrinet.simulation.BasicSimulation;
 import pl.edu.agh.petrinet.simulation.DefaultSimulation;
 
 import java.util.Arrays;
@@ -22,37 +22,38 @@ public class SimulationGUI {
     private Pane simulationPane;
 
 
-
     private PetriNetVisualizationViewer petriNetVisualizationViewer;
     private PetriGraph petriGraph;
 
     private ScrollPane consoleScrollPane;
     private TextArea consoleTextArea;
 
-    public SimulationGUI(PetriNetVisualizationViewer petriNetVisualizationViewer){
+    private FlowPane availableTransitionsPane;
+
+    public SimulationGUI(PetriNetVisualizationViewer petriNetVisualizationViewer) {
         this.petriNetVisualizationViewer = petriNetVisualizationViewer;
         this.petriGraph = petriNetVisualizationViewer.getPetriGraph();
         createSimulationMenu();
     }
 
-    public Pane getNewSimulationPane(){
+    public Pane getNewSimulationPane() {
         createSimulationMenu();
         return simulationPane;
     }
 
-    public ScrollPane getSimulationConsole(){
+    public ScrollPane getSimulationConsole() {
         return consoleScrollPane;
     }
 
-    public void writeOnConsole(String consoleMessage){
+    public void writeOnConsole(String consoleMessage) {
         consoleTextArea.appendText("\n" + consoleMessage);
     }
 
-    public void clearConsole(){
+    public void clearConsole() {
         consoleTextArea.clear();
     }
 
-    private void createSimulationMenu(){
+    private void createSimulationMenu() {
         VBox petriSimulationMenu = new VBox(5);
         simulationPane = petriSimulationMenu;
 
@@ -81,9 +82,9 @@ public class SimulationGUI {
         Button runSimulationButton = new Button("Start");
         runSimulationButton.setOnAction(event -> onRunSimulation());
 
-        Button oneSimulationStepButton = new Button("One Step");
+        Button oneSimulationStepButton = new Button("Stop");
         oneSimulationStepButton.setOnAction(event -> {
-
+            endManualSimulation();
         });
 
         petriSimulationMenu.getChildren().addAll(headerText, delayPane, isSimulationAutomaticRadioButton, runSimulationButton, oneSimulationStepButton, separator);
@@ -91,7 +92,7 @@ public class SimulationGUI {
         createConsole();
     }
 
-    private void createConsole(){
+    private void createConsole() {
         consoleTextArea = new TextArea();
         consoleTextArea.setEditable(false);
 
@@ -101,26 +102,27 @@ public class SimulationGUI {
         consoleScrollPane.setPrefHeight(180);
     }
 
-    private void onRunSimulation(){
+    private void onRunSimulation() {
         clearConsole();
 
-        if(petriGraph.getType() == PetriGraph.Type.DEFAULT){
-            if(isSimulationAutomaticRadioButton.isSelected()){
+        if (petriGraph.getType() == PetriGraph.Type.DEFAULT) {
+            if (isSimulationAutomaticRadioButton.isSelected()) {
                 runAutomateDefaultSimulation();
+            } else {
+                runManualDefaultSimulation();
             }
         }
     }
 
-    private void runAutomateDefaultSimulation(){
+    private void runAutomateDefaultSimulation() {
         petriGraph.compute();
-
         DefaultSimulation simulation = new DefaultSimulation(petriGraph);
 
         List<Integer> transitions;
         Random r = new Random();
         int transition;
-        for(int i = 0; i < 15; i++){
-            if(simulation.isSimulationEnded()){
+        for (int i = 0; i < 15; i++) {
+            if (simulation.isSimulationEnded()) {
                 break;
             }
 
@@ -134,5 +136,62 @@ public class SimulationGUI {
             System.out.println(consoleMessage);
             writeOnConsole(consoleMessage);
         }
+    }
+
+    private void runManualDefaultSimulation() {
+        availableTransitionsPane = new FlowPane();
+        availableTransitionsPane.setMaxWidth(180);
+        simulationPane.getChildren().add(availableTransitionsPane);
+
+        petriGraph.compute();
+        DefaultSimulation simulation = new DefaultSimulation(petriGraph);
+
+        petriNetVisualizationViewer.enterSimulationMode();
+
+        List<Integer> availableTransitions;
+        availableTransitions = simulation.getPossibleTransitions();
+
+        petriNetVisualizationViewer.setHighlightedTransitions(availableTransitions);
+        petriNetVisualizationViewer.getVisualizationViewer().repaint();
+        prepareForNextManualSimulationStep(availableTransitions, simulation);
+
+    }
+
+    private void prepareForNextManualSimulationStep(List<Integer> transitions, BasicSimulation simulation) {
+        if (simulation.isSimulationEnded()) return;
+
+        availableTransitionsPane.getChildren().clear();
+
+        for (int i = 0; i < transitions.size(); i++) {
+            Button button = new Button(transitions.get(i).toString());
+            button.setMaxSize(32, 32);
+            availableTransitionsPane.getChildren().add(button);
+
+            final int transitionId = new Integer(transitions.get(i));
+
+            button.setOnAction(event -> {
+                simulation.stepSimulate(transitionId);
+                String consoleMessage = "Transition " + transitionId + ": ";
+                consoleMessage += Arrays.toString(petriGraph.getCurrentState());
+                System.out.println(consoleMessage);
+                writeOnConsole(consoleMessage);
+
+                List<Integer> availableTransitions;
+                availableTransitions = simulation.getPossibleTransitions();
+
+                petriNetVisualizationViewer.setHighlightedTransitions(availableTransitions);
+                petriNetVisualizationViewer.getVisualizationViewer().repaint();
+
+                prepareForNextManualSimulationStep(availableTransitions, simulation);
+            });
+        }
+    }
+
+
+
+    private void endManualSimulation() {
+        availableTransitionsPane.getChildren().clear();
+        simulationPane.getChildren().remove(availableTransitionsPane);
+        petriNetVisualizationViewer.exitSimulationMode();
     }
 }

@@ -8,11 +8,11 @@ public class PetriGraphUtils {
     public static PetriGraph createTestPetriGraph(){
         PetriGraph petriGraph = new PetriGraph();
 
-        PetriPlace v1 = new PetriPlace(0, "PP0", 1);
-        PetriPlace v2 = new PetriPlace(1, "PP1");
-        PetriPlace v3 = new PetriPlace(2, "PP2", 1);
-        PetriPlace v4 = new PetriPlace(3, "PP3");
-        PetriPlace v5 = new PetriPlace(4, "PP4");
+        PetriPlace v1 = new PetriPlace(0, "P0", 1);
+        PetriPlace v2 = new PetriPlace(1, "P1");
+        PetriPlace v3 = new PetriPlace(2, "P2", 1);
+        PetriPlace v4 = new PetriPlace(3, "P3");
+        PetriPlace v5 = new PetriPlace(4, "P4");
 
         petriGraph.addPlace(v1);
         petriGraph.addPlace(v2);
@@ -20,10 +20,10 @@ public class PetriGraphUtils {
         petriGraph.addPlace(v4);
         petriGraph.addPlace(v5);
 
-        PetriTransition t1 = new PetriTransition(0, petriGraph.getType());
-        PetriTransition t2 = new PetriTransition(1, petriGraph.getType());
-        PetriTransition t3 = new PetriTransition(2, petriGraph.getType());
-        PetriTransition t4 = new PetriTransition(3, petriGraph.getType());
+        PetriTransition t1 = new PetriTransition(0, petriGraph.getType(), "T0");
+        PetriTransition t2 = new PetriTransition(1, petriGraph.getType(), "T1");
+        PetriTransition t3 = new PetriTransition(2, petriGraph.getType(), "T2");
+        PetriTransition t4 = new PetriTransition(3, petriGraph.getType(), "T3");
 
         petriGraph.addTransition(t1);
         petriGraph.addTransition(t2);
