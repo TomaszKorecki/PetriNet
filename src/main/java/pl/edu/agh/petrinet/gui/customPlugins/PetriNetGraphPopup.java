@@ -4,7 +4,6 @@ import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractPopupGraphMousePlugin;
-import javafx.scene.control.TextField;
 import pl.edu.agh.petrinet.model.*;
 
 import javax.swing.*;

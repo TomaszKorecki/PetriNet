@@ -2,29 +2,22 @@ package pl.edu.agh.petrinet.gui;
 
 import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.control.*;
-import edu.uci.ics.jung.visualization.decorators.EdgeShape;
+import edu.uci.ics.jung.visualization.control.AbstractModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.DefaultEdgeLabelRenderer;
-import edu.uci.ics.jung.visualization.renderers.EdgeLabelRenderer;
 import edu.uci.ics.jung.visualization3d.decorators.PickableVertexPaintTransformer;
-import javafx.scene.text.Text;
 import org.apache.commons.collections15.Transformer;
 import pl.edu.agh.petrinet.gui.customPlugins.PetriNetGraphPopup;
 import pl.edu.agh.petrinet.gui.customPlugins.PetriNetModalGraphMouse;
 import pl.edu.agh.petrinet.model.*;
 
-import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * Created by Tomasz on 5/2/2015.
@@ -71,7 +64,7 @@ public class PetriNetVisualizationViewer {
         visualizationViewer.setPreferredSize(new Dimension(600, 400));
     }
 
-    public PetriGraph getPetriGraph(){
+    public PetriGraph getPetriGraph() {
         return this.petriGraph;
     }
 
@@ -96,7 +89,7 @@ public class PetriNetVisualizationViewer {
         return petriEdge -> new Font("Default", 0, EDGES_LABEL_FONT_SIZE);
     }
 
-    private Transformer<PetriVertex, Font> createVertexFontTransformer(){
+    private Transformer<PetriVertex, Font> createVertexFontTransformer() {
         return petriVertex -> new Font("Default", 0, VERTICES_LABEL_FONT_SIZE);
     }
 
@@ -132,7 +125,7 @@ public class PetriNetVisualizationViewer {
 
             if (pickedEdges.length == 1 && pickedVertices.length == 0) {
                 PetriEdge pickedEdge = pickedEdges[0];
-                if(number > 0){
+                if (number > 0) {
                     pickedEdge.setMarkersCount(number);
                     visualizationViewer.repaint();
                 }

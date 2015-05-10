@@ -18,20 +18,14 @@ import pl.edu.agh.petrinet.model.PetriGraph;
 import pl.edu.agh.petrinet.model.PetriPlace;
 import pl.edu.agh.petrinet.model.PetriTransition;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
-
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Shape;
-import javax.swing.JComponent;
 
 
 public class PetriNetEditingEdgeMousePlugin<PetriVertex, PetriEdge> extends AbstractGraphMousePlugin implements MouseListener, MouseMotionListener {

@@ -1,31 +1,23 @@
 package pl.edu.agh.petrinet.gui;
 
-import com.sun.deploy.panel.RadioPropertyGroup;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.paint.*;
-import javafx.scene.paint.Color;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Separator;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import pl.edu.agh.petrinet.model.*;
+import pl.edu.agh.petrinet.model.PetriGraph;
+import pl.edu.agh.petrinet.model.PetriGraphUtils;
 
 import javax.swing.*;
-import javax.swing.plaf.SeparatorUI;
-import java.awt.*;
 
 
 public class MainView extends Application {
@@ -36,8 +28,9 @@ public class MainView extends Application {
     private SwingNode swingNode;
     private Pane simulationPane;
 
-    TextField simulationDelayTextField;
-    RadioButton isSimulationAutomaticRadioButton;
+    private PetriGraph petriGraph;
+
+
 
     private PetriNetVisualizationViewer petriNetVIsualizationViewer;
 
@@ -69,7 +62,9 @@ public class MainView extends Application {
         leftPane.setMinWidth(200);
 
         createPetriNetTypeMenu();
-        createSimulationMenu();
+
+        simulationPane = new  SimulationGUI(petriGraph).getSimulationPane();
+        leftPane.getChildren().addAll(simulationPane);
 
         rootPane.setLeft(leftPane);
     }
@@ -115,58 +110,9 @@ public class MainView extends Application {
 
     private void refreshSimulationMenu(){
         leftPane.getChildren().remove(simulationPane);
-        createSimulationMenu();
+        simulationPane = new  SimulationGUI(petriGraph).getSimulationPane();
+        leftPane.getChildren().addAll(simulationPane);
     }
-
-    private void createSimulationMenu(){
-        VBox petriSimulationMenu = new VBox(5);
-        simulationPane = petriSimulationMenu;
-
-        Text headerText = new Text("Simulation");
-        Separator separator = new Separator();
-        separator.setOrientation(Orientation.HORIZONTAL);
-        separator.setMinHeight(2);
-
-        Text delayText = new Text("Delay [ms]:");
-        simulationDelayTextField = new TextField();
-
-        simulationDelayTextField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    simulationDelayTextField.setText(oldValue);
-                }
-            }
-        });
-
-
-
-        HBox delayPane = new HBox();
-        delayPane.getChildren().addAll(delayText, simulationDelayTextField);
-        delayPane.setSpacing(10);
-
-        isSimulationAutomaticRadioButton = new RadioButton("Automatic");
-
-        Button runSimulationButton = new Button("Start");
-        runSimulationButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-            }
-        });
-
-        Button oneSimulationStepButton = new Button("One Step");
-        oneSimulationStepButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-            }
-        });
-
-        petriSimulationMenu.getChildren().addAll(headerText, delayPane, isSimulationAutomaticRadioButton,runSimulationButton, oneSimulationStepButton, separator);
-        leftPane.getChildren().addAll(petriSimulationMenu);
-    }
-
 
     /*
     Creates pane for JUNG's Graph
@@ -174,8 +120,7 @@ public class MainView extends Application {
     private void createCenterPane() {
         centerPane = new StackPane();
 
-        PetriGraph petriGraph = new PetriGraph();
-        fillDefaultGraph(petriGraph);
+        petriGraph = PetriGraphUtils.createTestPetriGraph();
 
         swingNode = new SwingNode();
         petriNetVIsualizationViewer = new PetriNetVisualizationViewer(petriGraph);
@@ -184,40 +129,5 @@ public class MainView extends Application {
 
         centerPane.getChildren().add(swingNode);
         rootPane.setCenter(centerPane);
-    }
-
-    private void fillDefaultGraph(PetriGraph petriGraph){
-        PetriPlace v1 = new PetriPlace(0, "PP0", 1);
-        PetriPlace v2 = new PetriPlace(1, "PP1");
-        PetriPlace v3 = new PetriPlace(2, "PP2", 1);
-        PetriPlace v4 = new PetriPlace(3, "PP3");
-        PetriPlace v5 = new PetriPlace(4, "PP4");
-
-        petriGraph.addPlace(v1);
-        petriGraph.addPlace(v2);
-        petriGraph.addPlace(v3);
-        petriGraph.addPlace(v4);
-        petriGraph.addPlace(v5);
-
-        PetriTransition t1 = new PetriTransition(0, petriGraph.getType());
-        PetriTransition t2 = new PetriTransition(1, petriGraph.getType());
-        PetriTransition t3 = new PetriTransition(2, petriGraph.getType());
-        PetriTransition t4 = new PetriTransition(3, petriGraph.getType());
-
-        petriGraph.addTransition(t1);
-        petriGraph.addTransition(t2);
-        petriGraph.addTransition(t3);
-        petriGraph.addTransition(t4);
-
-        petriGraph.addEdge(v1, t1);
-        petriGraph.addEdge(t1, v2);
-        petriGraph.addEdge(v2, t2);
-        petriGraph.addEdge(t2, v5, 2);
-        petriGraph.addEdge(t2, v1);
-        petriGraph.addEdge(v5, t3, 2);
-        petriGraph.addEdge(t3, v4);
-        petriGraph.addEdge(v4, t4);
-        petriGraph.addEdge(t4, v3);
-        petriGraph.addEdge(v3, t3);
     }
 }

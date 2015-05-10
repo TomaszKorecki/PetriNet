@@ -6,14 +6,9 @@
 package pl.edu.agh.petrinet.gui.customPlugins;
 
 import edu.uci.ics.jung.visualization.control.*;
-import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
-import org.apache.commons.collections15.Factory;
 import pl.edu.agh.petrinet.model.PetriGraph;
 
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.ItemSelectable;
-import java.awt.event.ItemEvent;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
