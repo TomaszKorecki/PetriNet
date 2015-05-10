@@ -6,13 +6,15 @@ import edu.uci.ics.jung.visualization.control.AbstractModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.picking.PickedInfo;
-import edu.uci.ics.jung.visualization.renderers.DefaultEdgeLabelRenderer;
+import edu.uci.ics.jung.visualization.renderers.*;
+import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization3d.decorators.PickableVertexPaintTransformer;
 import org.apache.commons.collections15.Transformer;
 import pl.edu.agh.petrinet.gui.customPlugins.PetriNetGraphPopup;
 import pl.edu.agh.petrinet.gui.customPlugins.PetriNetModalGraphMouse;
 import pl.edu.agh.petrinet.model.*;
 
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -68,6 +70,8 @@ public class PetriNetVisualizationViewer {
         visualizationViewer.getRenderContext().setVertexFontTransformer(createVertexFontTransformer());
 
         visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<>());
+        visualizationViewer.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.AUTO);
+
         visualizationViewer.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<>());
 
         visualizationViewer.getRenderContext().setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(EDGE_LABEL_SELECTED_COLOR, false));

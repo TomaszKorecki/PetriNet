@@ -62,9 +62,9 @@ public class SimulationGUI {
         separator.setOrientation(Orientation.HORIZONTAL);
         separator.setMinHeight(2);
 
-        Text delayText = new Text("Delay [ms]:");
+        Text delayText = new Text("Delay [s]:");
         simulationDelayTextField = new TextField();
-        simulationDelayTextField.setPromptText("100");
+        simulationDelayTextField.setPromptText("1");
 
         simulationDelayTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
@@ -128,7 +128,6 @@ public class SimulationGUI {
 
             transitions = simulation.getPossibleTransitions();
             transition = transitions.get(r.nextInt(transitions.size()));
-
 
             simulation.stepSimulate(transition);
             String consoleMessage = "Transition " + transition + ": ";
