@@ -6,9 +6,8 @@ import pl.edu.agh.petrinet.algorithms.IncidenceMatrix;
 import pl.edu.agh.petrinet.algorithms.ReachabilityGraph;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.IntSummaryStatistics;
+import java.util.List;
 
 public class PetriGraph {
 
@@ -109,6 +108,14 @@ public class PetriGraph {
 
     public ReachabilityGraph getReachabilityGraph(){
         return this.reachabilityGraph;
+    }
+
+    public List<PetriPlace> getAllPlaces(){
+        return new ArrayList(this.places.values());
+    }
+
+    public List<PetriTransition> getAllTransitions(){
+        return new ArrayList(this.transitions.values());
     }
 
     private void computeM0(){

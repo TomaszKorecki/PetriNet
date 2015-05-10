@@ -1,18 +1,22 @@
 package pl.edu.agh.petrinet.model;
 
+import org.simpleframework.xml.Attribute;
+
 /**
  * Representation of vertex in PetriNet Graph
  */
-public abstract class PetriVertex {
+public abstract class PetriVertex{
 
     /**
      * ID of current vertex
      */
+    @Attribute(name = "ID")
     protected int id;
 
     /**
      * Name of current vertex
      */
+    @Attribute(name = "Name", required = false)
     protected String name;
 
     /**

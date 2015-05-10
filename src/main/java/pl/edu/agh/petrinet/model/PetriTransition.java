@@ -1,8 +1,12 @@
 package pl.edu.agh.petrinet.model;
 
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+
 /**
  * Representation of transition in Petri Net
  */
+@Root(name = "Transition")
 public class PetriTransition extends PetriVertex {
 
     /**
@@ -10,20 +14,21 @@ public class PetriTransition extends PetriVertex {
      * Time execution for this transition - for Time Petri net
      * Priority of this trnasition - for Priority Petri net
      */
+    @Attribute(name = "TimeOrPriority")
     private int specialTypeValue;
 
     /**
      * Current value of time execution for Time Petri net
      */
-    private int currentTimeForTimePetriNet;
+    private transient int currentTimeForTimePetriNet;
 
     /**
      * Information of Transition type based on Petri Net Type
      */
-    private PetriGraph.Type type;
+    private transient PetriGraph.Type type;
 
     /**
-     * Construcotr
+     * Constructor
      * @param id        ID of Transition
      * @param type      Graph type
      */
@@ -72,6 +77,19 @@ public class PetriTransition extends PetriVertex {
         if (type == PetriGraph.Type.TIME) {
             currentTimeForTimePetriNet = stv;
         }
+    }
+
+    public PetriTransition(@Attribute(name="ID") int id, @Attribute(name="TimeOrPriority") int specialTypeValue){
+        super(id);
+        this.specialTypeValue = specialTypeValue;
+    }
+
+    /**
+     * Set Graph type
+     * @param type
+     */
+    public void setType(PetriGraph.Type type){
+        this.type = type;
     }
 
     /**

@@ -1,8 +1,12 @@
 package pl.edu.agh.petrinet.model;
 
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+
 /**
  * Place representation of Petri net
  */
+@Root(name = "Place")
 public class PetriPlace extends PetriVertex {
 
     /**
@@ -13,13 +17,14 @@ public class PetriPlace extends PetriVertex {
     /**
      * Start up count of markers in place
      */
-    private int startupMarkersCount;
+    @Attribute(name = "Markers")
+    private transient int startupMarkersCount;
 
     /**
      * Constructor
      * @param id        ID of Place
      */
-    public PetriPlace(int id) {
+    public PetriPlace(@Attribute(name="ID") int id) {
         super(id);
         marksersCount = startupMarkersCount = 0;
     }
@@ -29,7 +34,7 @@ public class PetriPlace extends PetriVertex {
      * @param id                    ID of Place
      * @param startupMarkersCount   Startup markers count
      */
-    public PetriPlace(int id, int startupMarkersCount) {
+    public PetriPlace(@Attribute(name="ID") int id, @Attribute(name="Markers") int startupMarkersCount) {
         super(id);
         this.marksersCount = this.startupMarkersCount = startupMarkersCount;
     }
@@ -39,7 +44,7 @@ public class PetriPlace extends PetriVertex {
      * @param id        ID of Place
      * @param name      Name of Place
      */
-    public PetriPlace(int id, String name) {
+    public PetriPlace(@Attribute(name="ID") int id, @Attribute(name="Name") String name) {
         super(id, name);
         marksersCount = startupMarkersCount = 0;
     }
@@ -50,7 +55,7 @@ public class PetriPlace extends PetriVertex {
      * @param name                  Name of Place
      * @param startupMarkersCount   Startup markers count
      */
-    public PetriPlace(int id, String name, int startupMarkersCount) {
+    public PetriPlace(@Attribute(name="ID")int id, @Attribute(name="Name") String name, @Attribute(name="Markers") int startupMarkersCount) {
         super(id, name);
         this.marksersCount = this.startupMarkersCount = startupMarkersCount;
     }
@@ -95,6 +100,7 @@ public class PetriPlace extends PetriVertex {
 //                ", name='" + name + '\'' +
 //                '}';
 //    }
+
 
     @Override
     public String toString() {
