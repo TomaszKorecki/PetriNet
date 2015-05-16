@@ -94,8 +94,8 @@ public class ArchivingGUI {
 
 		if (file != null) {
 			try {
-				this.petriGraph = petriSerialization.deserialize(file);
-				petriNetVisualizationViewer.setPetriGraph(this.petriGraph);
+				petriGraph = petriSerialization.deserialize(file);
+				petriNetVisualizationViewer.setPetriGraph(petriGraph);
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}

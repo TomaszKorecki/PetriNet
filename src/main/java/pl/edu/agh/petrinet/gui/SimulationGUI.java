@@ -29,6 +29,9 @@ public class SimulationGUI {
 
     private FlowPane availableTransitionsPane;
 
+    Button runSimulationButton;
+    Button stopSimulationButton;
+
     public SimulationGUI(PetriNetVisualizationViewer petriNetVisualizationViewer) {
         this.petriNetVisualizationViewer = petriNetVisualizationViewer;
         this.petriGraph = petriNetVisualizationViewer.getPetriGraph();
@@ -78,15 +81,17 @@ public class SimulationGUI {
         isSimulationAutomaticRadioButton = new RadioButton("Automatic");
         isSimulationAutomaticRadioButton.setSelected(true);
 
-        Button runSimulationButton = new Button("Start");
+        runSimulationButton = new Button("Start");
         runSimulationButton.setOnAction(event -> onRunSimulation());
 
-        Button oneSimulationStepButton = new Button("Stop");
-        oneSimulationStepButton.setOnAction(event -> {
+        stopSimulationButton = new Button("Stop");
+        stopSimulationButton.setOnAction(event -> {
             endManualSimulation();
         });
 
-        petriSimulationMenu.getChildren().addAll(headerText, isSimulationAutomaticRadioButton, runSimulationButton, oneSimulationStepButton, separator);
+        stopSimulationButton.setDisable(true);
+
+        petriSimulationMenu.getChildren().addAll(headerText, isSimulationAutomaticRadioButton, runSimulationButton, stopSimulationButton, separator);
 
         createConsole();
     }
@@ -137,6 +142,8 @@ public class SimulationGUI {
     }
 
     private void runManualDefaultSimulation() {
+        runSimulationButton.setDisable(true);
+        stopSimulationButton.setDisable(false);
         availableTransitionsPane = new FlowPane();
         availableTransitionsPane.setMaxWidth(180);
         simulationPane.getChildren().add(availableTransitionsPane);
@@ -150,7 +157,6 @@ public class SimulationGUI {
         availableTransitions = simulation.getPossibleTransitions();
 
         petriNetVisualizationViewer.setHighlightedTransitions(availableTransitions);
-        petriNetVisualizationViewer.getVisualizationViewer().repaint();
         prepareForNextManualSimulationStep(availableTransitions, simulation);
 
     }
@@ -188,6 +194,8 @@ public class SimulationGUI {
 
 
     private void endManualSimulation() {
+        runSimulationButton.setDisable(false);
+        stopSimulationButton.setDisable(true);
         availableTransitionsPane.getChildren().clear();
         simulationPane.getChildren().remove(availableTransitionsPane);
         petriNetVisualizationViewer.exitSimulationMode();
