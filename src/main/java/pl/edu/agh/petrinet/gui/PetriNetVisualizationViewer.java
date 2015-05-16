@@ -83,6 +83,11 @@ public class PetriNetVisualizationViewer {
         return this.petriGraph;
     }
 
+    public void setPetriGraph(PetriGraph petriGraph){
+        this.petriGraph = petriGraph;
+        getVisualizationViewer().repaint();
+    }
+
     public VisualizationViewer<PetriVertex, PetriEdge> getVisualizationViewer() {
         return this.visualizationViewer;
     }
@@ -137,10 +142,6 @@ public class PetriNetVisualizationViewer {
     private Transformer<PetriVertex, Font> createVertexFontTransformer() {
         return petriVertex -> new Font("Default", 0, VERTICES_LABEL_FONT_SIZE);
     }
-
-
-
-
 
     private class PetriNetKeyAdapter extends KeyAdapter {
         private PetriGraph petriGraph;

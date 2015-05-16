@@ -82,7 +82,7 @@ public class MainView extends Application {
     }
 
     private void createRightPane(){
-        rootPane.setRight(new ArchivingGUI(petriNetVIsualizationViewer).getArchivingPane());
+        rootPane.setRight(new ArchivingGUI(petriNetVIsualizationViewer, primaryStage).getArchivingPane());
     }
 
     /*
@@ -120,7 +120,6 @@ public class MainView extends Application {
         timeNetRadioButton.setToggleGroup(toggleGroup);
 
         defaultNetRadioButton.setSelected(true);
-
         toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == defaultNetRadioButton) {
                 petriNetVIsualizationViewer.getPetriGraph().setType(PetriGraph.Type.DEFAULT);

@@ -62,7 +62,9 @@ public class PetriGraph {
     public boolean removePlace(PetriPlace p) {
         boolean result = graph.removeVertex(p);
         if (result) {
-            places.remove(p);
+            System.out.println(places.size());
+            places.remove(p.getId());
+            System.out.println(places.size());
         }
         return result;
     }
@@ -75,7 +77,7 @@ public class PetriGraph {
     public boolean removeTransition(PetriTransition t) {
         boolean result = graph.removeVertex(t);
         if (result) {
-            transitions.remove(t);
+            transitions.remove(t.getId());
         }
         return result;
     }
@@ -127,10 +129,11 @@ public class PetriGraph {
     private void computeM0() {
         m0 = new int[getPlacesCount()];
 
+        int i = 0;
         for (PetriVertex pv : graph.getVertices()) {
             if (pv instanceof PetriPlace) {
                 ((PetriPlace) pv).resetMarkersCount();
-                m0[pv.getId()] = ((PetriPlace) pv).getMarksersCount();
+                m0[i++] = ((PetriPlace) pv).getMarksersCount();
             }
         }
     }
@@ -194,6 +197,10 @@ public class PetriGraph {
             if (sortedTransitions.get(i).getId() != i) return i;
         }
         return sortedTransitions.size();
+    }
+
+    public String toString(){
+        return "Places count: " + places.size() + "    Transitions count: " + transitions.size();
     }
 
 }

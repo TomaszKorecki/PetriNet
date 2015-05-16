@@ -44,12 +44,17 @@ public class PetriSerialization {
         this.graph = g;
     }
 
+
+    public void serialize(String filename) throws Exception{
+        serialize(new File(filename));
+    }
+
     /**
      * Serialize petri net to given xml file
      * @param file          XML file path
      * @throws Exception
      */
-    public void serialize(String file) throws Exception {
+    public void serialize(File file) throws Exception {
         // We have something to serialize
         if(this.graph == null){
             throw new Exception("No graph...");
@@ -85,7 +90,11 @@ public class PetriSerialization {
         sp.edges = edges;
 
         // Write to file
-        s.write(sp, new File(file));
+        s.write(sp, file);
+    }
+
+    public PetriGraph deserialize(String filename) throws Exception{
+        return deserialize(new File(filename));
     }
 
     /**
@@ -94,15 +103,15 @@ public class PetriSerialization {
      * @return          PetriNet Graph
      * @throws Exception
      */
-    public PetriGraph deserialize(String file) throws Exception {
+    public PetriGraph deserialize(File file) throws Exception {
         // Clear current graph
         this.graph = null;
 
         // Read serialized graph
         SPetriGraph spg;
         Serializer s = new Persister();
-        File from = new File(file);
-        spg = s.read(SPetriGraph.class, from);
+
+        spg = s.read(SPetriGraph.class, file);
 
         // If no error occurred
         if(spg != null){

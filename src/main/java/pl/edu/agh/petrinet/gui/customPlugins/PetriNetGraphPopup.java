@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Tomasz on 5/2/2015.
@@ -31,15 +32,10 @@ public class PetriNetGraphPopup extends AbstractPopupGraphMousePlugin implements
     @Override
     protected void handlePopup(MouseEvent mouseEvent) {
 
-        final Point2D p = mouseEvent.getPoint();
-        System.out.println("mouse event!");
-
         JPopupMenu popup = new JPopupMenu();
         GraphElementAccessor<PetriVertex,PetriEdge> pickSupport = visualizationViewer.getPickSupport();
 
         if(pickSupport != null){
-            System.out.println("edge or vertex!");
-
             final PetriVertex petriVertex = pickSupport.getVertex(visualizationViewer.getGraphLayout(), mouseEvent.getX(), mouseEvent.getY());
             final PetriEdge petriEdge = pickSupport.getEdge(visualizationViewer.getGraphLayout(), mouseEvent.getX(), mouseEvent.getY());
             AbstractAction[] actions = new AbstractAction[0];
@@ -70,8 +66,12 @@ public class PetriNetGraphPopup extends AbstractPopupGraphMousePlugin implements
         abstractActions.add(new AbstractAction("Delete place") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                petriGraph.removePlace(place);
+                System.out.println(petriGraph.removePlace(place));
                 visualizationViewer.repaint();
+
+                petriGraph.compute();
+                System.out.println(petriGraph);
+                System.out.println(Arrays.deepToString(petriGraph.getIncidenceMatrix().getIncidenceMatrix()));
             }
         });
 
@@ -84,8 +84,12 @@ public class PetriNetGraphPopup extends AbstractPopupGraphMousePlugin implements
         abstractActions.add(new AbstractAction("Delete transition") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                petriGraph.removeTransition(transition);
+                System.out.println(petriGraph.removeTransition(transition));
                 visualizationViewer.repaint();
+
+                petriGraph.compute();
+                System.out.println(petriGraph);
+                System.out.println(Arrays.deepToString(petriGraph.getIncidenceMatrix().getIncidenceMatrix()));
             }
         });
 
@@ -99,6 +103,10 @@ public class PetriNetGraphPopup extends AbstractPopupGraphMousePlugin implements
                     public void actionPerformed(ActionEvent e) {
                         petriGraph.removeEdge(edge);
                         visualizationViewer.repaint();
+
+                        petriGraph.compute();
+                        System.out.println(petriGraph);
+                        System.out.println(Arrays.deepToString(petriGraph.getIncidenceMatrix().getIncidenceMatrix()));
                     }
                 }
         };
@@ -115,6 +123,10 @@ public class PetriNetGraphPopup extends AbstractPopupGraphMousePlugin implements
                     layout.setLocation(newPlace, visualizationViewer.getRenderContext().getMultiLayerTransformer().inverseTransform(mouseEvent.getPoint()));
 
                     visualizationViewer.repaint();
+
+                    petriGraph.compute();
+                    System.out.println(petriGraph);
+                    System.out.println(Arrays.deepToString(petriGraph.getIncidenceMatrix().getIncidenceMatrix()));
                 }
             },
                 new AbstractAction("Add transition") {
@@ -127,6 +139,10 @@ public class PetriNetGraphPopup extends AbstractPopupGraphMousePlugin implements
                         layout.setLocation(petriTransition, visualizationViewer.getRenderContext().getMultiLayerTransformer().inverseTransform(mouseEvent.getPoint()));
 
                         visualizationViewer.repaint();
+
+                        petriGraph.compute();
+                        System.out.println(petriGraph);
+                        System.out.println(Arrays.deepToString(petriGraph.getIncidenceMatrix().getIncidenceMatrix()));
                     }
                 }
         };
