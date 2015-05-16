@@ -45,8 +45,10 @@ public class MainView extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
+		swingNode = new SwingNode();
         petriGraph = PetriGraphUtils.createTestPetriGraph();
-        petriNetVIsualizationViewer = new PetriNetVisualizationViewer(petriGraph);
+        petriNetVIsualizationViewer = new PetriNetVisualizationViewer(petriGraph, swingNode);
+
 
         createMenuStructure(primaryStage);
     }
@@ -90,9 +92,6 @@ public class MainView extends Application {
     */
     private void createCenterPane() {
         centerPane = new StackPane();
-
-        swingNode = new SwingNode();
-        SwingUtilities.invokeLater(() -> swingNode.setContent(petriNetVIsualizationViewer.getVisualizationViewer()));
 
         centerPane.getChildren().add(swingNode);
         rootPane.setCenter(centerPane);

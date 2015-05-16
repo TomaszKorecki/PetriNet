@@ -9,6 +9,7 @@ import edu.uci.ics.jung.visualization.picking.PickedInfo;
 import edu.uci.ics.jung.visualization.renderers.*;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization3d.decorators.PickableVertexPaintTransformer;
+import javafx.embed.swing.SwingNode;
 import org.apache.commons.collections15.Transformer;
 import pl.edu.agh.petrinet.gui.customPlugins.PetriNetGraphPopup;
 import pl.edu.agh.petrinet.gui.customPlugins.PetriNetModalGraphMouse;
@@ -45,9 +46,16 @@ public class PetriNetVisualizationViewer {
     //For simulation purpose
     private List<Integer> highlightedTransitions;
 
-    public PetriNetVisualizationViewer(PetriGraph petriGraph) {
-        this.petriGraph = petriGraph;
+    private SwingNode swingNode;
 
+    public PetriNetVisualizationViewer(PetriGraph petriGraph, SwingNode swingNode) {
+        this.petriGraph = petriGraph;
+        this.swingNode = swingNode;
+        initialize();
+    }
+
+    private void initialize(){
+        System.out.println(petriGraph);
         visualizationViewer = new VisualizationViewer<>(new ISOMLayout<>(petriGraph.getGraph()));
         visualizationViewer.setBorder(new TitledBorder("Graf testowy"));
 
@@ -77,6 +85,8 @@ public class PetriNetVisualizationViewer {
         visualizationViewer.getRenderContext().setEdgeLabelRenderer(new DefaultEdgeLabelRenderer(EDGE_LABEL_SELECTED_COLOR, false));
 
         visualizationViewer.setPreferredSize(new Dimension(600, 400));
+
+        SwingUtilities.invokeLater(() -> swingNode.setContent(visualizationViewer));
     }
 
     public PetriGraph getPetriGraph() {
@@ -85,7 +95,8 @@ public class PetriNetVisualizationViewer {
 
     public void setPetriGraph(PetriGraph petriGraph){
         this.petriGraph = petriGraph;
-        getVisualizationViewer().repaint();
+        initialize();
+        visualizationViewer.repaint();
     }
 
     public VisualizationViewer<PetriVertex, PetriEdge> getVisualizationViewer() {
@@ -96,11 +107,13 @@ public class PetriNetVisualizationViewer {
         highlightedTransitions = new LinkedList<>();
         visualizationViewer.getRenderContext().setVertexFillPaintTransformer(createSimulationVertexFillPaintTransformer());
         visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<>());
+        visualizationViewer.repaint();
     }
 
     public void exitSimulationMode(){
         visualizationViewer.getRenderContext().setVertexFillPaintTransformer(createVertexFillPaintTransformer());
         visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<>());
+        visualizationViewer.repaint();
     }
 
     public void setHighlightedTransitions(List<Integer> highlightedTransitions){
