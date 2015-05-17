@@ -1,17 +1,17 @@
 <PetriGraph>
    <GraphType>Default</GraphType>
    <Places class="java.util.ArrayList">
-      <Place ID="0" Name="P0" Markers="1"/>
-      <Place ID="1" Name="P1" Markers="0"/>
+      <Place ID="0" Name="P2" Markers="1"/>
+      <Place ID="1" Name="P3" Markers="0"/>
    </Places>
    <Transitions class="java.util.ArrayList">
-      <Transition ID="0" Name="T0" TimeOrPriority="0"/>
-      <Transition ID="3" Name="T3" TimeOrPriority="0"/>
+      <Transition ID="0" Name="T2" TimeOrPriority="0"/>
+      <Transition ID="1" Name="T3" TimeOrPriority="0"/>
    </Transitions>
    <Edges class="java.util.ArrayList">
-      <Edge Markers="1" FromType="Place" FromId="1" ToType="Transition" ToId="3"/>
-      <Edge Markers="1" FromType="Transition" FromId="3" ToType="Place" ToId="0"/>
-      <Edge Markers="1" FromType="Transition" FromId="0" ToType="Place" ToId="1"/>
       <Edge Markers="1" FromType="Place" FromId="0" ToType="Transition" ToId="0"/>
+      <Edge Markers="1" FromType="Place" FromId="1" ToType="Transition" ToId="1"/>
+      <Edge Markers="1" FromType="Transition" FromId="0" ToType="Place" ToId="1"/>
+      <Edge Markers="1" FromType="Transition" FromId="1" ToType="Place" ToId="0"/>
    </Edges>
 </PetriGraph>

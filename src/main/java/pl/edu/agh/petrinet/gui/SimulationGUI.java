@@ -67,7 +67,7 @@ public class SimulationGUI {
 //        delayPane.setSpacing(10);
 
         isSimulationAutomaticRadioButton = new RadioButton("Automatic");
-        isSimulationAutomaticRadioButton.setSelected(true);
+        isSimulationAutomaticRadioButton.setSelected(false);
 
         runSimulationButton = new Button("Start");
         runSimulationButton.setOnAction(event -> onRunSimulation());
