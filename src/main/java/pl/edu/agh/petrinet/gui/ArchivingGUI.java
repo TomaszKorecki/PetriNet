@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import pl.edu.agh.petrinet.gui.visualizationViewers.PetriNetVisualizationViewer;
 import pl.edu.agh.petrinet.model.PetriGraph;
 import pl.edu.agh.petrinet.serialization.PetriSerialization;
 

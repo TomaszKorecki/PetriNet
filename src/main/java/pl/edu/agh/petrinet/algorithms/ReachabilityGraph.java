@@ -62,6 +62,7 @@ public class ReachabilityGraph {
      */
     public ReachabilityGraph(PetriGraph graph){
         this.graph = graph;
+
         this.tIncidenceMatrix = graph.getIncidenceMatrix().getTIncidenceMatrix();
         this.tNegativeMatrix = graph.getIncidenceMatrix().getTNegativeMatrix();
 
@@ -70,6 +71,10 @@ public class ReachabilityGraph {
         hasCollectorTransitions = graph.getIncidenceMatrix().hasCollectorTransition();
         isCoverabilityGraph = false;
         generate();
+    }
+
+    public PetriStateGraph getPetriStateGraph(){
+        return  stateGraph;
     }
 
     /**

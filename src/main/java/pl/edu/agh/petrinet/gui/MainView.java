@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import pl.edu.agh.petrinet.gui.visualizationViewers.PetriNetVisualizationViewer;
 import pl.edu.agh.petrinet.model.PetriGraph;
 import pl.edu.agh.petrinet.model.PetriGraphUtils;
 
@@ -47,7 +48,6 @@ public class MainView extends Application {
 		swingNode = new SwingNode();
         petriGraph = PetriGraphUtils.createTestPetriGraph();
         petriNetVIsualizationViewer = new PetriNetVisualizationViewer(petriGraph, swingNode);
-
 
         createMenuStructure(primaryStage);
     }

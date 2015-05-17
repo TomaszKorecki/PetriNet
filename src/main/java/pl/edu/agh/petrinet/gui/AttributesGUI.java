@@ -4,14 +4,12 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import pl.edu.agh.petrinet.algorithms.Attributes;
-import pl.edu.agh.petrinet.gui.PetriNetVisualizationViewer;
+import pl.edu.agh.petrinet.gui.visualizationViewers.PetriNetVisualizationViewer;
 import pl.edu.agh.petrinet.model.PetriGraph;
 
 /**
@@ -51,9 +49,9 @@ public class AttributesGUI {
 		refreshAttributesButton.setOnAction(event -> {
 
 			petriGraph.validateGraph();
-			if(!petriGraph.isGraphIsValid()){
+			if (!petriGraph.isGraphIsValid()) {
 				Console.writeGraphValidationResult(petriGraph);
-			}else{
+			} else {
 				petriGraph.compute();
 				Attributes calculatedAttributes = new Attributes(petriGraph);
 
@@ -62,7 +60,18 @@ public class AttributesGUI {
 			}
 		});
 
+		Button reachabilityGraphButton = new Button("Reachability graph");
+		reachabilityGraphButton.setOnAction(event -> {
+			petriGraph.validateGraph();
+			if (!petriGraph.isGraphIsValid()) {
+				Console.writeGraphValidationResult(petriGraph);
+			} else {
+				ReachabilityGraphWindow window = new ReachabilityGraphWindow(petriGraph);
+				window.show();
+			}
+		});
 
-		attributesVPane.getChildren().addAll(headerText, separator, refreshAttributesButton);
+
+		attributesVPane.getChildren().addAll(headerText, separator, refreshAttributesButton, reachabilityGraphButton);
 	}
 }

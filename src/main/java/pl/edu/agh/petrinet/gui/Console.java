@@ -42,7 +42,6 @@ public class Console {
 		consoleInstance.consoleTextArea.appendText(consoleMessage + "\n");
 	}
 
-
 	public static void clearConsole() {
 		consoleInstance.consoleTextArea.clear();
 	}

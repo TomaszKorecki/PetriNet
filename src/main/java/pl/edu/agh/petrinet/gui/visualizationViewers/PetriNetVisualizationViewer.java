@@ -1,4 +1,4 @@
-package pl.edu.agh.petrinet.gui;
+package pl.edu.agh.petrinet.gui.visualizationViewers;
 
 import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -55,7 +55,6 @@ public class PetriNetVisualizationViewer {
     }
 
     private void initialize(){
-        System.out.println(petriGraph);
         visualizationViewer = new VisualizationViewer<>(new ISOMLayout<>(petriGraph.getGraph()));
         visualizationViewer.setBorder(new TitledBorder("Graf testowy"));
 
@@ -178,9 +177,6 @@ public class PetriNetVisualizationViewer {
 
             PetriEdge[] pickedEdges = visualizationViewer.getPickedEdgeState().getPicked().toArray(new PetriEdge[0]);
             PetriVertex[] pickedVertices = visualizationViewer.getPickedVertexState().getPicked().toArray(new PetriVertex[0]);
-
-            //System.out.println("Picked edges in count  " + pickedEdges.length);
-            //System.out.println("Picked vertices in count   " + pickedVertices.length);
 
             if (pickedEdges.length == 1 && pickedVertices.length == 0) {
                 PetriEdge pickedEdge = pickedEdges[0];

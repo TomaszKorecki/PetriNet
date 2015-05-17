@@ -81,4 +81,7 @@ public class PetriStateGraph {
         return new HashSet<>(graph.getEdges());
     }
 
+    public Graph<PetriStateVertex, PetriStateEdge> getGraph(){
+        return  graph;
+    }
 }
