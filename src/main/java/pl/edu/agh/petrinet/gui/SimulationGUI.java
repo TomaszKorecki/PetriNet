@@ -24,9 +24,6 @@ public class SimulationGUI {
     private PetriNetVisualizationViewer petriNetVisualizationViewer;
     private PetriGraph petriGraph;
 
-    private ScrollPane consoleScrollPane;
-    private TextArea consoleTextArea;
-
     private FlowPane availableTransitionsPane;
 
     Button runSimulationButton;
@@ -36,6 +33,8 @@ public class SimulationGUI {
         this.petriNetVisualizationViewer = petriNetVisualizationViewer;
         this.petriGraph = petriNetVisualizationViewer.getPetriGraph();
         createSimulationMenu();
+
+
     }
 
     public Pane getNewSimulationPane() {
@@ -43,17 +42,6 @@ public class SimulationGUI {
         return simulationPane;
     }
 
-    public ScrollPane getSimulationConsole() {
-        return consoleScrollPane;
-    }
-
-    public void writeOnConsole(String consoleMessage) {
-        consoleTextArea.appendText("\n" + consoleMessage);
-    }
-
-    public void clearConsole() {
-        consoleTextArea.clear();
-    }
 
     private void createSimulationMenu() {
         VBox petriSimulationMenu = new VBox(5);
@@ -92,22 +80,12 @@ public class SimulationGUI {
         stopSimulationButton.setDisable(true);
 
         petriSimulationMenu.getChildren().addAll(headerText, isSimulationAutomaticRadioButton, runSimulationButton, stopSimulationButton, separator);
-
-        createConsole();
     }
 
-    private void createConsole() {
-        consoleTextArea = new TextArea();
-        consoleTextArea.setEditable(false);
 
-        consoleScrollPane = new ScrollPane();
-        consoleScrollPane.setContent(consoleTextArea);
-        consoleScrollPane.setFitToWidth(true);
-        consoleScrollPane.setPrefHeight(180);
-    }
 
     private void onRunSimulation() {
-        clearConsole();
+        Console.clearConsole();
 
         if (petriGraph.getType() == PetriGraph.Type.DEFAULT) {
             if (isSimulationAutomaticRadioButton.isSelected()) {
@@ -137,7 +115,7 @@ public class SimulationGUI {
             String consoleMessage = "Transition " + transition + ": ";
             consoleMessage += Arrays.toString(petriGraph.getCurrentState());
             System.out.println(consoleMessage);
-            writeOnConsole(consoleMessage);
+            Console.writeOnConsole(consoleMessage);
         }
     }
 
@@ -179,7 +157,7 @@ public class SimulationGUI {
                 String consoleMessage = "Transition " + transitionId + ": ";
                 consoleMessage += Arrays.toString(petriGraph.getCurrentState());
                 System.out.println(consoleMessage);
-                writeOnConsole(consoleMessage);
+                Console.writeOnConsole(consoleMessage);
 
                 List<Integer> availableTransitions;
                 availableTransitions = simulation.getPossibleTransitions();

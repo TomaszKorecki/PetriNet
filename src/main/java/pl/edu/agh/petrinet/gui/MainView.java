@@ -17,25 +17,24 @@ import javafx.stage.Stage;
 import pl.edu.agh.petrinet.model.PetriGraph;
 import pl.edu.agh.petrinet.model.PetriGraphUtils;
 
-import javax.swing.*;
-
 
 public class MainView extends Application {
     private Stage primaryStage;
     private BorderPane rootPane;
 
     private VBox leftPane;
+    private VBox rightPane;
     private StackPane centerPane;
     private Pane bottomPane;
 
     private SwingNode swingNode;
-    private Pane simulationPane;
 
     private PetriGraph petriGraph;
 
     private PetriNetVisualizationViewer petriNetVIsualizationViewer;
 
     private SimulationGUI simulationGUI;
+    private Pane simulationPane;
 
     public static void main(String[] args) {
         launch(args);
@@ -84,7 +83,15 @@ public class MainView extends Application {
     }
 
     private void createRightPane(){
-        rootPane.setRight(new ArchivingGUI(petriNetVIsualizationViewer, primaryStage).getArchivingPane());
+        rightPane = new VBox(10);
+        rightPane.setPadding(new Insets(10, 10, 10, 10));
+        rightPane.setMinWidth(200);
+
+        rightPane.getChildren().addAll(
+                new ArchivingGUI(petriNetVIsualizationViewer, primaryStage).getArchivingPane(),
+                new AttributesGUI(petriNetVIsualizationViewer).getAttributesPane());
+
+        rootPane.setRight(rightPane);
     }
 
     /*
@@ -98,7 +105,7 @@ public class MainView extends Application {
     }
 
     private void createBottomPane(){
-        rootPane.setBottom(simulationGUI.getSimulationConsole());
+        rootPane.setBottom(Console.getConsoleInstance().getConsole());
     }
 
 

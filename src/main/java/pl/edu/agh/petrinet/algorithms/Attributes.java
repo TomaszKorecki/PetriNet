@@ -82,6 +82,18 @@ public class Attributes {
                 '}';
     }
 
+    public String oneColumnString(){
+        return "Attributes \n" +
+                "placesLimitation=" + placesLimitation +
+                "\nnetLimitation=" + netLimitation +
+                "\nisSafe=" + isSafe +
+                "\nisConservative=" + isConservative +
+                "\nisReversible=" + isReversible +
+                "\nisNetLive=" + isNetLive +
+                "\nplacesLiveness=" + placesLiveness +
+                "\ntransitionsLiveness=" + transitionsLiveness;
+    }
+
     private void computeAttributes() {
         computeLimitationAndSafety();
         computeConservatism();
