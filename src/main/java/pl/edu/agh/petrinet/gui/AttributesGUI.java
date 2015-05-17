@@ -48,15 +48,19 @@ public class AttributesGUI {
 		separator.setMinHeight(2);
 
 		Button refreshAttributesButton = new Button("Calcuate");
-
 		refreshAttributesButton.setOnAction(event -> {
-			petriGraph.compute();
-			Attributes calculatedAttributes = new Attributes(petriGraph);
 
-			Console.clearConsole();
-			Console.writeOnConsole(calculatedAttributes.oneColumnString());
+			petriGraph.validateGraph();
+			if(!petriGraph.isGraphIsValid()){
+				Console.writeGraphValidationResult(petriGraph);
+			}else{
+				petriGraph.compute();
+				Attributes calculatedAttributes = new Attributes(petriGraph);
+
+				Console.clearConsole();
+				Console.writeOnConsole(calculatedAttributes.oneColumnString());
+			}
 		});
-
 
 
 		attributesVPane.getChildren().addAll(headerText, separator, refreshAttributesButton);

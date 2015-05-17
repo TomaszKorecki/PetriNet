@@ -14,6 +14,8 @@ import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractGraphMousePlugin;
 import edu.uci.ics.jung.visualization.util.ArrowFactory;
+import javafx.application.Platform;
+import pl.edu.agh.petrinet.gui.Console;
 import pl.edu.agh.petrinet.model.PetriGraph;
 import pl.edu.agh.petrinet.model.PetriPlace;
 import pl.edu.agh.petrinet.model.PetriTransition;
@@ -109,6 +111,8 @@ public class PetriNetEditingEdgeMousePlugin<PetriVertex, PetriEdge> extends Abst
                     } else if (endVertex instanceof PetriPlace && startVertex instanceof PetriTransition) {
                         petriGraph.addEdge((PetriTransition) startVertex, (PetriPlace) endVertex);
                     }
+
+                    Console.writeGraphValidationResult(petriGraph);
                 }
 
                 vv.repaint();

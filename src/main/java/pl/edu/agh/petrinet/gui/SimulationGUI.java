@@ -87,6 +87,13 @@ public class SimulationGUI {
     private void onRunSimulation() {
         Console.clearConsole();
 
+        petriGraph.validateGraph();
+        if(!petriGraph.isGraphIsValid()){
+            Console.writeGraphValidationResult(petriGraph);
+            return;
+        }
+
+
         if (petriGraph.getType() == PetriGraph.Type.DEFAULT) {
             if (isSimulationAutomaticRadioButton.isSelected()) {
                 runAutomateDefaultSimulation();
@@ -120,13 +127,13 @@ public class SimulationGUI {
     }
 
     private void runManualDefaultSimulation() {
+        petriGraph.compute();
         runSimulationButton.setDisable(true);
         stopSimulationButton.setDisable(false);
         availableTransitionsPane = new FlowPane();
         availableTransitionsPane.setMaxWidth(180);
         simulationPane.getChildren().add(availableTransitionsPane);
 
-        petriGraph.compute();
         System.out.println(petriGraph);
         DefaultSimulation simulation = new DefaultSimulation(petriGraph);
 

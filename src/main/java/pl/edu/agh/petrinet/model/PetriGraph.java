@@ -287,6 +287,14 @@ public class PetriGraph {
         return sortedTransitions.size();
     }
 
+    public boolean isGraphIsValid(){
+        return graphIsValid;
+    }
+
+    public List<String> getValidationResults(){
+        return validationResult;
+    }
+
     public String toString(){
         return "Places count: " + places.size() + "    Transitions count: " + transitions.size();
     }
