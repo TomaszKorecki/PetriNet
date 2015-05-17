@@ -69,9 +69,10 @@ public class PetriNetGraphPopup extends AbstractPopupGraphMousePlugin implements
                 System.out.println(petriGraph.removePlace(place));
                 visualizationViewer.repaint();
 
+                System.out.println("Before computing");
                 petriGraph.compute();
                 System.out.println(petriGraph);
-                System.out.println(Arrays.deepToString(petriGraph.getIncidenceMatrix().getIncidenceMatrix()));
+                System.out.println("Incidence matrix " + Arrays.deepToString(petriGraph.getIncidenceMatrix().getIncidenceMatrix()));
             }
         });
 

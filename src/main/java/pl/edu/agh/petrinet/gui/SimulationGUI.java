@@ -149,6 +149,7 @@ public class SimulationGUI {
         simulationPane.getChildren().add(availableTransitionsPane);
 
         petriGraph.compute();
+        System.out.println(petriGraph);
         DefaultSimulation simulation = new DefaultSimulation(petriGraph);
 
         petriNetVisualizationViewer.enterSimulationMode();

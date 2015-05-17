@@ -163,6 +163,6 @@ public class PetriTransition extends PetriVertex {
 
     @Override
     public String toString() {
-        return name + "   " + specialTypeValue;
+        return "T" + id + "   " + specialTypeValue;
     }
 }

@@ -65,10 +65,13 @@ public class PetriGraph {
             System.out.println(places.size());
             int lastPlace = places.size();
             places.remove(p.getId());
-            for(int i = p.getId()+1; i < lastPlace; i++){
-                PetriPlace pp = places.remove(i);
-                pp.setId(i - 1);
-                places.put(pp.getId(), pp);
+            for(int i = p.getId() + 1; i < lastPlace; i++){
+//                PetriPlace pp = places.remove(i);
+//                pp.setId(i - 1);
+//                places.put(pp.getId(), pp);
+                System.out.println("Trying to drcrease id for element with id  " + i);
+                PetriPlace futherPetiPlace = places.get(i);
+                futherPetiPlace.setId(futherPetiPlace.getId() - 1);
             }
             System.out.println(places.size());
         }
@@ -152,9 +155,10 @@ public class PetriGraph {
     public void compute() {
         computeM0();
 
+        System.out.println("m0 computed");
+
         incidenceMatrix = new IncidenceMatrix(this);
         reachabilityGraph = new ReachabilityGraph(this);
-
     }
 
     public int[] getM0() {

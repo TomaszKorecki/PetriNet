@@ -104,6 +104,6 @@ public class PetriPlace extends PetriVertex {
 
     @Override
     public String toString() {
-        return name + "   " + marksersCount;
+        return "P" + id + "   " + marksersCount;
     }
 }
