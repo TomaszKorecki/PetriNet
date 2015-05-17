@@ -17,6 +17,7 @@ public class SimulateDefault {
 
     public static void main(String[] args) {
         PetriGraph graph = createGraph();
+        graph.removePlace(graph.getPlace(3));
         graph.compute();
 
         Attributes attributes = new Attributes(graph);

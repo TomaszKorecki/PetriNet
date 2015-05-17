@@ -72,6 +72,7 @@ public class IncidenceMatrix {
         tNegativeMatrix = new int[transitionsCount][placesCount];
 
         generate();
+        initCollectorTransition();
     }
 
     /**
@@ -86,11 +87,13 @@ public class IncidenceMatrix {
             for(PetriEdge pe : edges){
                 // If it is an edge from Place to Transition fill up removing count
                 if(pe.getV1() instanceof PetriPlace){
-                    negativeMatrix[ pe.getV1().getId() ][ pe.getV2().getId() ] = pe.getMarkersCount();
-                    tNegativeMatrix[ pe.getV2().getId() ][ pe.getV1().getId() ] = pe.getMarkersCount();
+                    if(graph.getPlace(pe.getV1().getId()) == pe.getV1() && graph.getTransition(pe.getV2().getId()) == pe.getV2()){
+                        negativeMatrix[ pe.getV1().getId() ][ pe.getV2().getId() ] = pe.getMarkersCount();
+                        tNegativeMatrix[ pe.getV2().getId() ][ pe.getV1().getId() ] = pe.getMarkersCount();
+                    }
                 }
                 // But if edge goes from transition to place = we add markers
-                else{
+                else if(graph.getPlace(pe.getV2().getId()) == pe.getV2() && graph.getTransition(pe.getV1().getId()) == pe.getV1()){
                     positiveMatrix[ pe.getV2().getId() ][ pe.getV1().getId() ] = pe.getMarkersCount();
                 }
             }

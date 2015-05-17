@@ -6,6 +6,7 @@ import pl.edu.agh.petrinet.algorithms.IncidenceMatrix;
 import pl.edu.agh.petrinet.algorithms.ReachabilityGraph;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,6 +28,9 @@ public class PetriGraph {
     private ReachabilityGraph reachabilityGraph;
 
     private int[] m0;
+
+    private List<String> validationResult;
+    private boolean graphIsValid;
 
     public PetriGraph() {
         type = Type.DEFAULT;
@@ -66,12 +70,12 @@ public class PetriGraph {
             int lastPlace = places.size();
             places.remove(p.getId());
             for(int i = p.getId() + 1; i < lastPlace; i++){
-//                PetriPlace pp = places.remove(i);
-//                pp.setId(i - 1);
-//                places.put(pp.getId(), pp);
                 System.out.println("Trying to drcrease id for element with id  " + i);
-                PetriPlace futherPetiPlace = places.get(i);
-                futherPetiPlace.setId(futherPetiPlace.getId() - 1);
+                PetriPlace pp = places.remove(i);
+                pp.setId(i - 1);
+                places.put(pp.getId(), pp);
+                //PetriPlace futherPetiPlace = places.get(i);
+                //futherPetiPlace.setId(futherPetiPlace.getId() - 1);
             }
             System.out.println(places.size());
         }
@@ -141,18 +145,89 @@ public class PetriGraph {
         return new ArrayList<>(this.transitions.values());
     }
 
+    public HashMap<Integer, PetriTransition> getTransitionsHash(){
+        return this.transitions;
+    }
+
+    public HashMap<Integer, PetriPlace> getPlacesHash(){
+        return this.places;
+    }
+
     private void computeM0() {
         m0 = new int[getPlacesCount()];
 
-        for (PetriVertex pv : graph.getVertices()) {
-            if (pv instanceof PetriPlace) {
-                ((PetriPlace) pv).resetMarkersCount();
-                m0[pv.getId()] = ((PetriPlace) pv).getMarksersCount();
-            }
+        for (PetriPlace pv : this.places.values()) {
+            pv.resetMarkersCount();
+            m0[pv.getId()] = pv.getMarksersCount();
         }
     }
 
+    /**
+     * Validate graph if all places and transitions are correct
+     */
+    public void validateGraph(){
+        validationResult = new ArrayList<>();
+        Collection<PetriEdge> edges = graph.getEdges();
+
+        // Temporary variables
+        boolean isValid;
+        boolean isValid2;
+
+        // Check places
+        for(PetriPlace pp : places.values()){
+            isValid = false;    // Assume it is wrong place
+            for(PetriEdge pe : edges){
+                if(pe.getV1() == pp || pe.getV2() == pp){ // If there is way out or in from place it is valid
+                    isValid = true;
+                    break;
+                }
+            }
+            // Add note if invalid
+            if(!isValid){
+                validationResult.add("Place " + pp.getName() + " has no incoming or outcoming edges.");
+            }
+        }
+
+        //Check Transitions
+        for(PetriTransition pt : transitions.values()){
+            isValid = false;        // Assume has no outcoming edge
+            isValid2 = false;       // Assume has no incomming edge
+            for(PetriEdge pe : edges){
+                if(pe.getV1() == pt){       // Check outcomming
+                    isValid = true;
+                }
+                else if(pe.getV2() == pt){  // Check incomming
+                    isValid2 = true;
+                }
+
+                if(isValid && isValid2){    // Must have both valid
+                    break;
+                }
+            }
+
+            // If has no outcoming
+            if(!isValid){
+                validationResult.add("Transition " + pt.getName() + " has no outcoming edges.");
+            }
+
+            // If has no incoming
+            if(!isValid2){
+                validationResult.add("Transition " + pt.getName() + " has no incoming edges.");
+            }
+        }
+
+        // Graph is valid if has no notes
+        graphIsValid = validationResult.isEmpty();
+    }
+
     public void compute() {
+        // Validate graph - invalide graph can produce endless loops
+        validateGraph();
+
+        if(graphIsValid == false){
+            return;
+        }
+
         computeM0();
 
         System.out.println("m0 computed");
@@ -168,10 +243,8 @@ public class PetriGraph {
     public int[] getCurrentState() {
         int[] ret = new int[getPlacesCount()];
 
-        for (PetriVertex pv : graph.getVertices()) {
-            if (pv instanceof PetriPlace) {
-                ret[pv.getId()] = ((PetriPlace) pv).getMarksersCount();
-            }
+        for (PetriPlace pv : this.places.values()) {
+            ret[pv.getId()] = pv.getMarksersCount();
         }
         return ret;
     }

@@ -58,7 +58,17 @@ public abstract class PetriVertex{
      * @return
      */
     public String getName() {
-        return name;
+
+        if(name != null){
+            return this.name;
+        }
+
+        if(this instanceof PetriPlace){
+            return "P"+getId();
+        }
+        else{
+            return "T"+getId();
+        }
     }
 
     /**

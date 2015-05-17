@@ -76,13 +76,8 @@ public class ReachabilityGraph {
      * Main generating function
      */
     private void generate(){
-
         // Fill hashmap of transitions
-        for(PetriVertex pv : graph.getGraph().getVertices()){
-            if(pv instanceof PetriTransition){
-                transitions.put(pv.getId(), (PetriTransition)pv);
-            }
-        }
+        transitions = graph.getTransitionsHash();
 
         // Create M0 state
         PetriStateVertex sM0 = new PetriStateVertex(graph.getM0(), 0);
