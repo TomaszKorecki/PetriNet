@@ -39,7 +39,9 @@ public class Console {
 	}
 
 	public static void writeOnConsole(String consoleMessage) {
-		consoleInstance.consoleTextArea.appendText(consoleMessage + "\n");
+		Platform.runLater(() -> {
+			consoleInstance.consoleTextArea.appendText(consoleMessage + "\n");
+		});
 	}
 
 	public static void clearConsole() {
