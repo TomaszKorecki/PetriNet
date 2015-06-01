@@ -54,6 +54,10 @@ public class PetriGraph {
         this.type = type;
     }
 
+    public Type getType() {
+        return this.type;
+    }
+
     public void setGraph(Graph<PetriVertex, PetriEdge> graph) {
         this.graph = graph;
     }
@@ -249,9 +253,6 @@ public class PetriGraph {
         return ret;
     }
 
-    public Type getType() {
-        return this.type;
-    }
 
     public PetriPlace getPlace(int i) {
         if (places.containsKey(i)) {

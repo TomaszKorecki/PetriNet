@@ -16,6 +16,7 @@ import pl.edu.agh.petrinet.gui.visualizationViewers.PetriNetVisualizationViewer;
 import pl.edu.agh.petrinet.model.PetriGraph;
 import pl.edu.agh.petrinet.simulation.BasicSimulation;
 import pl.edu.agh.petrinet.simulation.DefaultSimulation;
+import pl.edu.agh.petrinet.simulation.PetriNetSimulationFactory;
 
 import javax.print.attribute.standard.NumberUp;
 import javax.swing.*;
@@ -31,7 +32,6 @@ public class SimulationGUI {
 	private Pane simulationPane;
 
 	private PetriNetVisualizationViewer petriNetVisualizationViewer;
-	private PetriGraph petriGraph;
 
 	private FlowPane availableTransitionsPane;
 
@@ -44,7 +44,6 @@ public class SimulationGUI {
 
 	public SimulationGUI(PetriNetVisualizationViewer petriNetVisualizationViewer, MainView mainView) {
 		this.petriNetVisualizationViewer = petriNetVisualizationViewer;
-		this.petriGraph = petriNetVisualizationViewer.getPetriGraph();
 		this.mainView = mainView;
 		createSimulationMenu();
 	}
@@ -120,7 +119,7 @@ public class SimulationGUI {
 	private void onRunSimulation() {
 		Console.clearConsole();
 
-		petriGraph = petriNetVisualizationViewer.getPetriGraph();
+		PetriGraph petriGraph = petriNetVisualizationViewer.getPetriGraph();
 
 		petriGraph.validateGraph();
 		if (!petriGraph.isGraphIsValid()) {
@@ -139,13 +138,13 @@ public class SimulationGUI {
 	}
 
 	private void runAutomateDefaultSimulation() {
-		petriGraph = petriNetVisualizationViewer.getPetriGraph();
+		PetriGraph petriGraph = petriNetVisualizationViewer.getPetriGraph();
 		petriGraph.compute();
 
 		runSimulationButton.setDisable(true);
 		stopSimulationButton.setDisable(false);
 
-		DefaultSimulation simulation = new DefaultSimulation(petriGraph);
+		BasicSimulation simulation = PetriNetSimulationFactory.createSimulation(petriGraph);
 
 		petriNetVisualizationViewer.enterSimulationMode();
 
@@ -193,7 +192,7 @@ public class SimulationGUI {
 	}
 
 	private void runManualDefaultSimulation() {
-		petriGraph = petriNetVisualizationViewer.getPetriGraph();
+		PetriGraph petriGraph = petriNetVisualizationViewer.getPetriGraph();
 		petriGraph.compute();
 		runSimulationButton.setDisable(true);
 		stopSimulationButton.setDisable(false);
@@ -202,7 +201,8 @@ public class SimulationGUI {
 		simulationPane.getChildren().add(availableTransitionsPane);
 
 		System.out.println(petriGraph);
-		DefaultSimulation simulation = new DefaultSimulation(petriGraph);
+
+		BasicSimulation simulation = PetriNetSimulationFactory.createSimulation(petriGraph);
 
 		petriNetVisualizationViewer.enterSimulationMode();
 
@@ -210,10 +210,10 @@ public class SimulationGUI {
 		availableTransitions = simulation.getPossibleTransitions();
 
 		petriNetVisualizationViewer.setHighlightedTransitions(availableTransitions);
-		prepareForNextManualSimulationStep(availableTransitions, simulation);
+		prepareForNextManualSimulationStep(availableTransitions, simulation, petriGraph);
 	}
 
-	private void prepareForNextManualSimulationStep(List<Integer> transitions, BasicSimulation simulation) {
+	private void prepareForNextManualSimulationStep(List<Integer> transitions, BasicSimulation simulation, PetriGraph petriGraph) {
 		if (simulation.isSimulationEnded()) return;
 
 		availableTransitionsPane.getChildren().clear();
@@ -238,7 +238,7 @@ public class SimulationGUI {
 				petriNetVisualizationViewer.setHighlightedTransitions(availableTransitions);
 				petriNetVisualizationViewer.getVisualizationViewer().repaint();
 
-				prepareForNextManualSimulationStep(availableTransitions, simulation);
+				prepareForNextManualSimulationStep(availableTransitions, simulation, petriGraph);
 			});
 		}
 	}
