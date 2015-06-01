@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import pl.edu.agh.petrinet.gui.MainView;
 import pl.edu.agh.petrinet.gui.visualizationViewers.PetriNetVisualizationViewer;
 import pl.edu.agh.petrinet.model.PetriGraph;
 import pl.edu.agh.petrinet.serialization.PetriSerialization;
@@ -20,16 +21,18 @@ import java.io.File;
  * Created by Tomasz on 5/10/2015.
  */
 public class ArchivingGUI {
+	private MainView mainView;
 	private VBox archivingPane;
 	private Stage primaryStage;
 	private PetriNetVisualizationViewer petriNetVisualizationViewer;
 	private PetriGraph petriGraph;
 
 
-	public ArchivingGUI(PetriNetVisualizationViewer petriNetVisualizationViewer, Stage primaryStage) {
+	public ArchivingGUI(PetriNetVisualizationViewer petriNetVisualizationViewer, Stage primaryStage, MainView mainView) {
 		this.petriNetVisualizationViewer = petriNetVisualizationViewer;
 		this.primaryStage = primaryStage;
 		this.petriGraph = petriNetVisualizationViewer.getPetriGraph();
+		this.mainView = mainView;
 		createArchivingMenu();
 	}
 

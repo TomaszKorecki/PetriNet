@@ -40,6 +40,9 @@ public class MainView extends Application {
     private SimulationGUI simulationGUI;
     private Pane simulationPane;
 
+    private AttributesGUI attributesGUI;
+    private ArchivingGUI archivingGUI;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -78,7 +81,7 @@ public class MainView extends Application {
         leftPane.setPadding(new Insets(10, 10, 10, 10));
         leftPane.setMinWidth(200);
 
-        simulationGUI = new SimulationGUI(petriNetVIsualizationViewer);
+        simulationGUI = new SimulationGUI(petriNetVIsualizationViewer, this);
         simulationPane = simulationGUI.getNewSimulationPane();
 
         leftPane.getChildren().addAll(createPetriNetTypeMenu(), simulationPane);
@@ -90,9 +93,12 @@ public class MainView extends Application {
         rightPane.setPadding(new Insets(10, 10, 10, 10));
         rightPane.setMinWidth(200);
 
+        archivingGUI = new ArchivingGUI(petriNetVIsualizationViewer, primaryStage, this);
+        attributesGUI = new AttributesGUI(petriNetVIsualizationViewer, this);
+
         rightPane.getChildren().addAll(
-                new ArchivingGUI(petriNetVIsualizationViewer, primaryStage).getArchivingPane(),
-                new AttributesGUI(petriNetVIsualizationViewer).getAttributesPane());
+                archivingGUI.getArchivingPane(),
+                attributesGUI.getAttributesPane());
 
         rootPane.setRight(rightPane);
     }

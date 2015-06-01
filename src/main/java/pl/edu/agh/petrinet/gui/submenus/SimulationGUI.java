@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import pl.edu.agh.petrinet.gui.Console;
+import pl.edu.agh.petrinet.gui.MainView;
 import pl.edu.agh.petrinet.gui.visualizationViewers.PetriNetVisualizationViewer;
 import pl.edu.agh.petrinet.model.PetriGraph;
 import pl.edu.agh.petrinet.simulation.BasicSimulation;
@@ -18,6 +19,7 @@ import java.util.Random;
 
 
 public class SimulationGUI {
+    private MainView mainView;
     //private TextField simulationDelayTextField;
     private RadioButton isSimulationAutomaticRadioButton;
     private Pane simulationPane;
@@ -30,12 +32,11 @@ public class SimulationGUI {
     Button runSimulationButton;
     Button stopSimulationButton;
 
-    public SimulationGUI(PetriNetVisualizationViewer petriNetVisualizationViewer) {
+    public SimulationGUI(PetriNetVisualizationViewer petriNetVisualizationViewer, MainView mainView) {
         this.petriNetVisualizationViewer = petriNetVisualizationViewer;
         this.petriGraph = petriNetVisualizationViewer.getPetriGraph();
+        this.mainView = mainView;
         createSimulationMenu();
-
-
     }
 
     public Pane getNewSimulationPane() {
@@ -184,8 +185,6 @@ public class SimulationGUI {
         stopSimulationButton.setDisable(true);
         availableTransitionsPane.getChildren().clear();
         simulationPane.getChildren().remove(availableTransitionsPane);
-
-        //petriNetVisualizationViewer.getPetriGraph().r
         petriNetVisualizationViewer.exitSimulationMode();
     }
 }

@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import pl.edu.agh.petrinet.algorithms.Attributes;
 import pl.edu.agh.petrinet.gui.Console;
+import pl.edu.agh.petrinet.gui.MainView;
 import pl.edu.agh.petrinet.gui.ReachabilityGraphWindow;
 import pl.edu.agh.petrinet.gui.visualizationViewers.PetriNetVisualizationViewer;
 import pl.edu.agh.petrinet.model.PetriGraph;
@@ -18,16 +19,17 @@ import pl.edu.agh.petrinet.model.PetriGraph;
  * Created by Tomasz on 5/17/2015.
  */
 public class AttributesGUI {
-
+	private MainView mainView;
 	private Pane attributesPane;
 
 	private PetriNetVisualizationViewer petriNetVisualizationViewer;
 	private PetriGraph petriGraph;
 
 
-	public AttributesGUI(PetriNetVisualizationViewer petriNetVisualizationViewer) {
+	public AttributesGUI(PetriNetVisualizationViewer petriNetVisualizationViewer, MainView mainView) {
 		this.petriNetVisualizationViewer = petriNetVisualizationViewer;
 		this.petriGraph = petriNetVisualizationViewer.getPetriGraph();
+		this.mainView = mainView;
 		createAttributesMenu();
 	}
 
