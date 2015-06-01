@@ -1,6 +1,5 @@
 package pl.edu.agh.petrinet.model;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,6 +12,11 @@ public class PetriStateVertex {
 	 * Current Petri Graph status
 	 */
 	private int[] placeStatus;
+
+    /**
+     * Current transitions times
+     */
+    private int[] transitionsTimes;
 
 	/**
 	 * Level of vertex
@@ -81,6 +85,15 @@ public class PetriStateVertex {
 		return placeStatus;
 	}
 
+    /**
+     * Update markers count in place
+     * @param i     place ID
+     * @param v     count of markers
+     */
+    public void updatePlaceMarksCount(int i, int v){
+        placeStatus[i] = v;
+    }
+
 	/**
 	 * Add next transition to route
 	 *
@@ -99,6 +112,15 @@ public class PetriStateVertex {
 		return route;
 	}
 
+    public void setTransitionsTimes(int[] times){
+        this.transitionsTimes = times;
+    }
+
+    public int[] getTransitionsTimes(){
+        return this.transitionsTimes;
+    }
+
+
 	/**
 	 * Check for equality with another state
 	 *
@@ -110,11 +132,32 @@ public class PetriStateVertex {
 		if (obj instanceof PetriStateVertex == false)
 			return false;
 
-		int[] state = ((PetriStateVertex) obj).getPlaceMarksCounts();
+        PetriStateVertex psv = (PetriStateVertex) obj;
+
+		int[] state = psv.getPlaceMarksCounts();
 		for (int i = 0; i < placeStatus.length; i++) {
 			if (state[i] != placeStatus[i])
 				return false;
 		}
+
+        // If times are set check it too
+        int[] psvTransitionsTimes = psv.getTransitionsTimes();
+        if((transitionsTimes != null && psvTransitionsTimes == null) || (transitionsTimes == null && psvTransitionsTimes != null)){
+            return false;
+        }
+        else if(transitionsTimes != null && psvTransitionsTimes != null){
+            if(transitionsTimes.length != psvTransitionsTimes.length){
+                return false;
+            }
+
+            for(int i=0; i< transitionsTimes.length; i++){
+                if(transitionsTimes[i] != psvTransitionsTimes[i]){
+                    return false;
+                }
+            }
+
+        }
+
 		return true;
 	}
 
