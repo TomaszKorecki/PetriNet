@@ -43,4 +43,29 @@ public class PetriGraphUtils {
 
         return petriGraph;
     }
+
+    public static PetriGraph createPriorityPetriGraph(){
+        PetriGraph petriGraph = new PetriGraph();
+        petriGraph.setType(PetriGraph.Type.PRIORYTY);
+
+        PetriPlace v1 = new PetriPlace(0, "P0", 10);
+        PetriPlace v2 = new PetriPlace(1, "P1");
+
+        petriGraph.addPlace(v1);
+        petriGraph.addPlace(v2);
+
+        PetriTransition t1 = new PetriTransition(0, petriGraph.getType(), "T0", 1);
+        PetriTransition t2 = new PetriTransition(1, petriGraph.getType(), "T1", 2);
+
+        petriGraph.addTransition(t1);
+        petriGraph.addTransition(t2);
+
+        petriGraph.addEdge(v1, t1);
+        petriGraph.addEdge(v1, t2);
+
+        petriGraph.addEdge(t1, v2);
+        petriGraph.addEdge(t2, v2);
+
+        return petriGraph;
+    }
 }

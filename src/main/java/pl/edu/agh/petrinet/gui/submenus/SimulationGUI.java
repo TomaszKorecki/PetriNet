@@ -105,7 +105,7 @@ public class SimulationGUI {
 		stopSimulationButton.setOnAction(event -> {
 			endSimulation();
 
-			if(!isSimulationAutomaticRadioButton.isSelected()){
+			if (!isSimulationAutomaticRadioButton.isSelected()) {
 				clearPossibleTransitionsPane();
 			}
 		});
@@ -128,12 +128,10 @@ public class SimulationGUI {
 		}
 
 
-		if (petriGraph.getType() == PetriGraph.Type.DEFAULT) {
-			if (isSimulationAutomaticRadioButton.isSelected()) {
-				runAutomateDefaultSimulation();
-			} else {
-				runManualDefaultSimulation();
-			}
+		if (isSimulationAutomaticRadioButton.isSelected()) {
+			runAutomateDefaultSimulation();
+		} else {
+			runManualDefaultSimulation();
 		}
 	}
 
@@ -168,7 +166,7 @@ public class SimulationGUI {
 				try {
 					// If sleep then sleep :)
 					if (automaticSimulationDelayValue > 0) {
-						Thread.sleep((int)(automaticSimulationDelayValue * 1000));
+						Thread.sleep((int) (automaticSimulationDelayValue * 1000));
 					}
 				} catch (InterruptedException e) {
 				}
@@ -214,7 +212,11 @@ public class SimulationGUI {
 	}
 
 	private void prepareForNextManualSimulationStep(List<Integer> transitions, BasicSimulation simulation, PetriGraph petriGraph) {
-		if (simulation.isSimulationEnded()) return;
+		if (simulation.isSimulationEnded()) {
+			endSimulation();
+			clearPossibleTransitionsPane();
+			return;
+		}
 
 		availableTransitionsPane.getChildren().clear();
 
@@ -248,6 +250,7 @@ public class SimulationGUI {
 		runSimulationButton.setDisable(false);
 		stopSimulationButton.setDisable(true);
 		petriNetVisualizationViewer.exitSimulationMode();
+		Console.writeOnConsole("Simulation is ended");
 	}
 
 	private void clearPossibleTransitionsPane() {

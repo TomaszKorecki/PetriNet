@@ -161,8 +161,12 @@ public class PetriTransition extends PetriVertex {
         return 0;
     }
 
+    public void resetStartupTimeForTimePetriNet(){
+        this.currentTimeForTimePetriNet = specialTypeValue;
+    }
+
     @Override
     public String toString() {
-        return "T" + id + "   " + specialTypeValue;
+        return "T" + id + "   " + (type == PetriGraph.Type.TIME ? currentTimeForTimePetriNet : specialTypeValue);
     }
 }

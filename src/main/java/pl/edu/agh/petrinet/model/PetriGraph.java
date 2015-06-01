@@ -52,6 +52,7 @@ public class PetriGraph {
 
     public void setType(Type type) {
         this.type = type;
+        transitions.forEach((integer, petriTransition) -> petriTransition.setType(type));
     }
 
     public Type getType() {
@@ -296,8 +297,9 @@ public class PetriGraph {
         return validationResult;
     }
 
-    public void resetAllPlacesMarkersCount(){
+    public void resetAllVerticesSpecialValues(){
         places.forEach((integer, petriPlace) -> petriPlace.resetMarkersCount());
+        transitions.forEach((integer, petriTransition) -> petriTransition.resetStartupTimeForTimePetriNet());
     }
 
     public String toString(){

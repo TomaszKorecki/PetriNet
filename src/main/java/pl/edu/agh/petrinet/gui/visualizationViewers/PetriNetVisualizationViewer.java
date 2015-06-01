@@ -5,7 +5,6 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import edu.uci.ics.jung.visualization.picking.PickedInfo;
 import edu.uci.ics.jung.visualization.renderers.*;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization3d.decorators.PickableVertexPaintTransformer;
@@ -112,7 +111,7 @@ public class PetriNetVisualizationViewer {
     public void exitSimulationMode(){
         visualizationViewer.getRenderContext().setVertexFillPaintTransformer(createVertexFillPaintTransformer());
         visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<>());
-        petriGraph.resetAllPlacesMarkersCount();
+        petriGraph.resetAllVerticesSpecialValues();
         visualizationViewer.repaint();
     }
 
