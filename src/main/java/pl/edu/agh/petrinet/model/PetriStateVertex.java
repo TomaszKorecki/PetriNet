@@ -142,10 +142,15 @@ public class PetriStateVertex {
 
         // If times are set check it too
         int[] psvTransitionsTimes = psv.getTransitionsTimes();
+
+        if(transitionsTimes == null && psvTransitionsTimes == null){
+            return true;
+        }
+
         if((transitionsTimes != null && psvTransitionsTimes == null) || (transitionsTimes == null && psvTransitionsTimes != null)){
             return false;
         }
-        else if(transitionsTimes != null && psvTransitionsTimes != null){
+        else{
             if(transitionsTimes.length != psvTransitionsTimes.length){
                 return false;
             }

@@ -17,8 +17,15 @@ public class SimulateDefault {
 
     public static void main(String[] args) {
         PetriGraph graph = createGraph();
-        graph.removePlace(graph.getPlace(3));
+        //graph.removePlace(graph.getPlace(3));
         graph.compute();
+
+        if(graph.isGraphIsValid() == false){
+            for(String mes : graph.getValidationResults()){
+                System.out.println(mes);
+            }
+            return;
+        }
 
         Attributes attributes = new Attributes(graph);
         System.out.println(attributes);
