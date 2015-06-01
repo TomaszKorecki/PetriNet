@@ -1,4 +1,4 @@
-package pl.edu.agh.petrinet.gui;
+package pl.edu.agh.petrinet.gui.submenus;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -9,6 +9,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import pl.edu.agh.petrinet.algorithms.Attributes;
+import pl.edu.agh.petrinet.gui.Console;
+import pl.edu.agh.petrinet.gui.ReachabilityGraphWindow;
 import pl.edu.agh.petrinet.gui.visualizationViewers.PetriNetVisualizationViewer;
 import pl.edu.agh.petrinet.model.PetriGraph;
 
