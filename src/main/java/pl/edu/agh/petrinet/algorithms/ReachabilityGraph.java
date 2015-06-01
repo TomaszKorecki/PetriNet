@@ -137,7 +137,7 @@ public class ReachabilityGraph {
 
             // Create new state object
             PetriStateVertex psv = new PetriStateVertex(nState, state.getLevel() + 1, state.getRoute());
-            psv.addToRoute(i);
+
             if(graph.getType() == PetriGraph.Type.TIME){
                 int time = state.getTransitionsTimes()[i];
                 int[] nTimes = state.getTransitionsTimes().clone();
@@ -156,6 +156,8 @@ public class ReachabilityGraph {
             if(graph.getIncidenceMatrix().isColectorTransition(i)){
                 computeIfPossibleTransition(psv, i);
             }
+
+            psv.addToRoute(i);
 
             // Check whether new state already exists - loop
             containsIndex = currentStates.indexOf(psv);
