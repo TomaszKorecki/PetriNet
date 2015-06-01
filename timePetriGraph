@@ -1,0 +1,27 @@
+<PetriGraph>
+   <GraphType>Time</GraphType>
+   <Places class="java.util.ArrayList">
+      <Place ID="0" Markers="1"/>
+      <Place ID="1" Markers="0"/>
+      <Place ID="2" Markers="0"/>
+      <Place ID="3" Markers="0"/>
+   </Places>
+   <Transitions class="java.util.ArrayList">
+      <Transition ID="0" TimeOrPriority="2"/>
+      <Transition ID="1" TimeOrPriority="5"/>
+      <Transition ID="2" TimeOrPriority="3"/>
+      <Transition ID="3" TimeOrPriority="1"/>
+   </Transitions>
+   <Edges class="java.util.ArrayList">
+      <Edge Markers="1" FromType="Transition" FromId="3" ToType="Place" ToId="3"/>
+      <Edge Markers="1" FromType="Transition" FromId="2" ToType="Place" ToId="2"/>
+      <Edge Markers="1" FromType="Place" FromId="1" ToType="Transition" ToId="3"/>
+      <Edge Markers="1" FromType="Place" FromId="0" ToType="Transition" ToId="0"/>
+      <Edge Markers="1" FromType="Transition" FromId="1" ToType="Place" ToId="3"/>
+      <Edge Markers="1" FromType="Transition" FromId="0" ToType="Place" ToId="0"/>
+      <Edge Markers="1" FromType="Place" FromId="0" ToType="Transition" ToId="2"/>
+      <Edge Markers="1" FromType="Place" FromId="1" ToType="Transition" ToId="1"/>
+      <Edge Markers="1" FromType="Place" FromId="2" ToType="Transition" ToId="3"/>
+      <Edge Markers="1" FromType="Transition" FromId="0" ToType="Place" ToId="1"/>
+   </Edges>
+</PetriGraph>
