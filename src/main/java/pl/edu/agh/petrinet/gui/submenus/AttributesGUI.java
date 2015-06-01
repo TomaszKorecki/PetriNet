@@ -23,12 +23,10 @@ public class AttributesGUI {
 	private Pane attributesPane;
 
 	private PetriNetVisualizationViewer petriNetVisualizationViewer;
-	private PetriGraph petriGraph;
 
 
 	public AttributesGUI(PetriNetVisualizationViewer petriNetVisualizationViewer, MainView mainView) {
 		this.petriNetVisualizationViewer = petriNetVisualizationViewer;
-		this.petriGraph = petriNetVisualizationViewer.getPetriGraph();
 		this.mainView = mainView;
 		createAttributesMenu();
 	}
@@ -51,7 +49,7 @@ public class AttributesGUI {
 
 		Button refreshAttributesButton = new Button("Calcuate");
 		refreshAttributesButton.setOnAction(event -> {
-
+			PetriGraph petriGraph = petriNetVisualizationViewer.getPetriGraph();
 			petriGraph.validateGraph();
 			if (!petriGraph.isGraphIsValid()) {
 				Console.writeGraphValidationResult(petriGraph);
@@ -66,6 +64,7 @@ public class AttributesGUI {
 
 		Button reachabilityGraphButton = new Button("Reachability graph");
 		reachabilityGraphButton.setOnAction(event -> {
+			PetriGraph petriGraph = petriNetVisualizationViewer.getPetriGraph();
 			petriGraph.validateGraph();
 			if (!petriGraph.isGraphIsValid()) {
 				Console.writeGraphValidationResult(petriGraph);

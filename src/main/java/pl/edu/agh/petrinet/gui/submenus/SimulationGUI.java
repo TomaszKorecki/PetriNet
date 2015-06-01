@@ -89,6 +89,8 @@ public class SimulationGUI {
     private void onRunSimulation() {
         Console.clearConsole();
 
+        petriGraph = petriNetVisualizationViewer.getPetriGraph();
+
         petriGraph.validateGraph();
         if(!petriGraph.isGraphIsValid()){
             Console.writeGraphValidationResult(petriGraph);
@@ -106,6 +108,7 @@ public class SimulationGUI {
     }
 
     private void runAutomateDefaultSimulation() {
+        petriGraph = petriNetVisualizationViewer.getPetriGraph();
         petriGraph.compute();
         DefaultSimulation simulation = new DefaultSimulation(petriGraph);
 
@@ -129,6 +132,7 @@ public class SimulationGUI {
     }
 
     private void runManualDefaultSimulation() {
+        petriGraph = petriNetVisualizationViewer.getPetriGraph();
         petriGraph.compute();
         runSimulationButton.setDisable(true);
         stopSimulationButton.setDisable(false);
