@@ -112,6 +112,7 @@ public class PetriNetVisualizationViewer {
     public void exitSimulationMode(){
         visualizationViewer.getRenderContext().setVertexFillPaintTransformer(createVertexFillPaintTransformer());
         visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<>());
+        petriGraph.resetAllPlacesMarkersCount();
         visualizationViewer.repaint();
     }
 

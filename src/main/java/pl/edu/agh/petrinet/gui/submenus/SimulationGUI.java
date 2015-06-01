@@ -1,4 +1,4 @@
-package pl.edu.agh.petrinet.gui;
+package pl.edu.agh.petrinet.gui.submenus;
 
 import javafx.geometry.Orientation;
 import javafx.scene.control.*;
@@ -6,6 +6,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import pl.edu.agh.petrinet.gui.Console;
 import pl.edu.agh.petrinet.gui.visualizationViewers.PetriNetVisualizationViewer;
 import pl.edu.agh.petrinet.model.PetriGraph;
 import pl.edu.agh.petrinet.simulation.BasicSimulation;
@@ -178,12 +179,13 @@ public class SimulationGUI {
     }
 
 
-
     private void endManualSimulation() {
         runSimulationButton.setDisable(false);
         stopSimulationButton.setDisable(true);
         availableTransitionsPane.getChildren().clear();
         simulationPane.getChildren().remove(availableTransitionsPane);
+
+        //petriNetVisualizationViewer.getPetriGraph().r
         petriNetVisualizationViewer.exitSimulationMode();
     }
 }

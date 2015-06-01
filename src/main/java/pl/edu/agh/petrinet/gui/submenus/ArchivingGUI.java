@@ -1,4 +1,4 @@
-package pl.edu.agh.petrinet.gui;
+package pl.edu.agh.petrinet.gui.submenus;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;

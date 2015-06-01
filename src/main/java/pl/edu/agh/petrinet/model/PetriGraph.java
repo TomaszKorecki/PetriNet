@@ -295,6 +295,10 @@ public class PetriGraph {
         return validationResult;
     }
 
+    public void resetAllPlacesMarkersCount(){
+        places.forEach((integer, petriPlace) -> petriPlace.resetMarkersCount());
+    }
+
     public String toString(){
         return "Places count: " + places.size() + "    Transitions count: " + transitions.size();
     }
