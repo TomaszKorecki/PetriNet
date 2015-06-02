@@ -1,13 +1,17 @@
 package pl.edu.agh.petrinet.simulation;
 
 import pl.edu.agh.petrinet.model.PetriGraph;
+import pl.edu.agh.petrinet.model.PetriTransition;
 
-import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Simulation of priority Petri net
  */
 public class PrioritySimulation extends BasicSimulation {
+
+    protected List<Integer> temporaryPossibleTransitions;
 
     /**
      * Constructor
@@ -69,10 +73,14 @@ public class PrioritySimulation extends BasicSimulation {
     protected void generatePossibleTransitions() {
         currentState = graph.getCurrentState();
 
+        if(temporaryPossibleTransitions == null){
+            temporaryPossibleTransitions = new LinkedList<>();
+        }
+
         possibleTransitions.clear();
+        temporaryPossibleTransitions.clear();
 
         boolean canDoTransition;
-        int minPriority = Integer.MAX_VALUE;
         for(int i =0 ; i< graph.getTransitionsCount(); i++){
             // Check if transition is alive
             canDoTransition = true;
@@ -83,29 +91,32 @@ public class PrioritySimulation extends BasicSimulation {
                 }
             }
             if(canDoTransition){
-                // Update lowest priority?
-                if(graph.getTransition(i).getPriority() < minPriority){
-                    minPriority = graph.getTransition(i).getPriority();
-                }
                 // Add to possible list
-                possibleTransitions.add(i);
+                temporaryPossibleTransitions.add(i);
             }
         }
 
         // If list is empty  - done
-        if(possibleTransitions.isEmpty()){
+        if(temporaryPossibleTransitions.isEmpty()){
             return;
         }
 
-        // remove alive transition with priority higher then the lowest priority
-        int i;
-        for(Iterator<Integer> it = possibleTransitions.iterator(); it.hasNext();){
-            i = it.next();
-            if(graph.getTransition(i).getPriority() > minPriority){
-                it.remove();
+        int transitionPriority;
+        boolean add;
+        for(Integer i : temporaryPossibleTransitions){
+            add = true;
+            transitionPriority = graph.getTransition(i).getPriority();
+            List<PetriTransition> transitionsFromPrecessorPlace = graph.getTransitionsFromPredecessorPlace(i);
+            for(PetriTransition pt : transitionsFromPrecessorPlace){
+                if(temporaryPossibleTransitions.contains(pt.getId()) && pt.getPriority() < transitionPriority){
+                    add = false;
+                    break;
+                }
+            }
+            if(add){
+                possibleTransitions.add(i);
             }
         }
-
     }
 
     /**

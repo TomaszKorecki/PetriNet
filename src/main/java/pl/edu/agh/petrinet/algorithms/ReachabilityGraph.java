@@ -299,20 +299,27 @@ public class ReachabilityGraph {
      */
     private List<Integer> getPossibleTransitions(int[] cState, boolean isPriority){
         List<Integer> ret = getPossibleTransitions(cState);
-        if(isPriority && graph.getType() == PetriGraph.Type.PRIORYTY){
-            int lowestPriority = Integer.MAX_VALUE;
-            int lastPriority = 0;
-            for(Integer id : ret){
-                lastPriority = graph.getTransition(id).getPriority();
-                lowestPriority = Integer.min(lowestPriority, lastPriority);
-            }
+        if(isPriority && graph.getType() == PetriGraph.Type.PRIORYTY && ret.size() > 0){
+            List<Integer> priorityRet = new LinkedList<>();
 
-            for (Iterator<Integer> iterator = ret.iterator(); iterator.hasNext();) {
-                Integer currentId = iterator.next();
-                if (graph.getTransition(currentId).getPriority() != lowestPriority) {
-                    iterator.remove();
+            int transitionPriority;
+            boolean add;
+            for(Integer i : ret){
+                add = true;
+                transitionPriority = graph.getTransition(i).getPriority();
+                List<PetriTransition> transitionsFromPrecessorPlace = graph.getTransitionsFromPredecessorPlace(i);
+                for(PetriTransition pt : transitionsFromPrecessorPlace){
+                    if(ret.contains(pt.getId()) && pt.getPriority() < transitionPriority){
+                        add = false;
+                        break;
+                    }
+                }
+                if(add){
+                    priorityRet.add(i);
                 }
             }
+
+            return priorityRet;
 
         }
 

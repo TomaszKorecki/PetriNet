@@ -5,10 +5,7 @@ import edu.uci.ics.jung.graph.Graph;
 import pl.edu.agh.petrinet.algorithms.IncidenceMatrix;
 import pl.edu.agh.petrinet.algorithms.ReachabilityGraph;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class PetriGraph {
 
@@ -156,6 +153,22 @@ public class PetriGraph {
 
     public HashMap<Integer, PetriPlace> getPlacesHash(){
         return this.places;
+    }
+
+    public List<PetriTransition> getTransitionsFromPredecessorPlace(Integer tId){
+        return getTransitionsFromPredecessorPlace(getTransition(tId));
+    }
+
+    public List<PetriTransition> getTransitionsFromPredecessorPlace(PetriTransition t){
+        List<PetriVertex> places = new LinkedList(graph.getPredecessors(t));
+        List<PetriTransition> ret = new LinkedList<>();
+        for(PetriVertex pv : places){
+            List<PetriVertex> trs = new LinkedList<>(graph.getSuccessors(pv));
+            for(PetriVertex tr : trs){
+                ret.add((PetriTransition)tr);
+            }
+        }
+        return ret;
     }
 
     private void computeM0() {
