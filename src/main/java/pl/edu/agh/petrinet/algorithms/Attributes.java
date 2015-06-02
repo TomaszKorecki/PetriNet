@@ -125,6 +125,7 @@ public class Attributes {
 		computeConservatism();
 		computeReversibility();
 		computeLiveness();
+		computeReversibility();
 	}
 
 	private void computeLimitationAndSafety() {

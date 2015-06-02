@@ -145,6 +145,8 @@ public class PetriSerialization {
 
             }
 
+            this.graph.resetAllVerticesSpecialValues();
+
         }
 
         return this.graph;

@@ -28,6 +28,7 @@ import java.util.Random;
 public class SimulationGUI {
 	private MainView mainView;
 	private TextField simulationDelayTextField;
+	private TextField simulationStepsTextField;
 	private RadioButton isSimulationAutomaticRadioButton;
 	private Pane simulationPane;
 
@@ -39,6 +40,7 @@ public class SimulationGUI {
 	private Button stopSimulationButton;
 
 	private float automaticSimulationDelayValue = 0;
+	private int simulationStepsValue = 10;
 
 	private Thread automaticSimulationThread;
 
@@ -63,36 +65,56 @@ public class SimulationGUI {
 		separator.setOrientation(Orientation.HORIZONTAL);
 		separator.setMinHeight(2);
 
-		Text delayText = new Text("Delay [s]:");
+
 		simulationDelayTextField = new TextField();
-		simulationDelayTextField.setPromptText("0");
+		simulationDelayTextField.setPromptText(Float.toString(automaticSimulationDelayValue));
 
 		simulationDelayTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (NumberUtils.isNumber(newValue)) {
-				//mulationDelayTextField.setText(newValue);
-
 				try {
 					automaticSimulationDelayValue = Float.parseFloat(newValue);
 				} catch (Exception e) {
-
+					simulationDelayTextField.setText(oldValue);
 				}
 			} else {
 				simulationDelayTextField.setText(oldValue);
 			}
 		});
 
+		simulationStepsTextField = new TextField();
+		simulationStepsTextField.setPromptText(Integer.toString(simulationStepsValue));
+
+		simulationStepsTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (StringUtils.isNumeric(newValue)) {
+				try {
+					simulationStepsValue = Integer.parseInt(newValue);
+				} catch (Exception e) {
+					simulationStepsTextField.setText(oldValue);
+				}
+			} else {
+				simulationStepsTextField.setText(oldValue);
+			}
+		});
+
+
+		Text delayText = new Text("Delay [s]:");
 		HBox delayPane = new HBox();
 		delayPane.getChildren().addAll(delayText, simulationDelayTextField);
 		delayPane.setSpacing(10);
+
+		Text simulationStepsText = new Text("Steps: ");
+		HBox stepsPane = new HBox();
+		stepsPane.getChildren().addAll(simulationStepsText, simulationStepsTextField);
+		stepsPane.setSpacing(10);
 
 		isSimulationAutomaticRadioButton = new RadioButton("Automatic");
 		isSimulationAutomaticRadioButton.setSelected(false);
 
 		isSimulationAutomaticRadioButton.setOnAction(event1 -> {
 			if (isSimulationAutomaticRadioButton.isSelected()) {
-				petriSimulationMenu.getChildren().add(delayPane);
+				petriSimulationMenu.getChildren().addAll(delayPane, stepsPane);
 			} else {
-				petriSimulationMenu.getChildren().remove(delayPane);
+				petriSimulationMenu.getChildren().removeAll(delayPane, stepsPane);
 			}
 
 			petriSimulationMenu.requestLayout();
@@ -152,7 +174,7 @@ public class SimulationGUI {
 			List<Integer> transitions;
 			Random r = new Random();
 			int transition;
-			for (int i = 0; i < 15; i++) {
+			for (int i = 0; i < simulationStepsValue; i++) {
 				if (simulation.isSimulationEnded()) {
 					break;
 				}

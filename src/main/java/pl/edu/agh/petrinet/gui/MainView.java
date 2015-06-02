@@ -52,7 +52,7 @@ public class MainView extends Application {
         this.primaryStage = primaryStage;
 
 		swingNode = new SwingNode();
-        petriGraph = PetriGraphUtils.createPriorityPetriGraph();
+        petriGraph = PetriGraphUtils.createTestPetriGraph();
         petriNetVIsualizationViewer = new PetriNetVisualizationViewer(petriGraph, swingNode);
 
         createMenuStructure(primaryStage);
