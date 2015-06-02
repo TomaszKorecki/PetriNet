@@ -183,15 +183,22 @@ public class SimulationGUI {
 				transition = transitions.get(r.nextInt(transitions.size()));
 
 				petriNetVisualizationViewer.setHighlightedTransitions(transitions);
-				petriNetVisualizationViewer.getVisualizationViewer().repaint();
 
 				try {
-					// If sleep then sleep :)
 					if (automaticSimulationDelayValue > 0) {
 						Thread.sleep((int) (automaticSimulationDelayValue * 1000));
 					}
 				} catch (InterruptedException e) {
 				}
+
+//				petriNetVisualizationViewer.setHighlightedTransition(transition);
+//
+//				try {
+//					if (automaticSimulationDelayValue > 0) {
+//						Thread.sleep((int) (automaticSimulationDelayValue * 1000));
+//					}
+//				} catch (InterruptedException e) {
+//				}
 
 				simulation.stepSimulate(transition);
 
@@ -260,7 +267,6 @@ public class SimulationGUI {
 				availableTransitions = simulation.getPossibleTransitions();
 
 				petriNetVisualizationViewer.setHighlightedTransitions(availableTransitions);
-				petriNetVisualizationViewer.getVisualizationViewer().repaint();
 
 				prepareForNextManualSimulationStep(availableTransitions, simulation, petriGraph);
 			});
