@@ -175,7 +175,6 @@ public class PetriGraph {
         m0 = new int[getPlacesCount()];
 
         for (PetriPlace pv : this.places.values()) {
-            pv.resetMarkersCount();
             m0[pv.getId()] = pv.getMarksersCount();
         }
     }

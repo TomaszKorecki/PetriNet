@@ -224,12 +224,12 @@ public class ReachabilityGraph {
 
                 for(int k = 0; k < graph.getPlacesCount(); k++){
                     // If status on place is positive it is collector
-                    if(routeStateCount[k] > 0){
+                    if(routeStateCount[k] > 0 && tIncidenceMatrix[lastTransition][k] > 0){
                         buferPlacesIds.add(k);
                     }
-                    // but if any plac has negative value it means
+                    // but if any place has negative value it means
                     // that the loop can be done only several times
-                    else if(routeStateCount[k] < 0){
+                    else if(routeStateCount[k] < 0 && graph.getIncidenceMatrix().sumPlaceChanges(k) < 0){
                         buferPlacesIds.clear();
                         break;
                     }

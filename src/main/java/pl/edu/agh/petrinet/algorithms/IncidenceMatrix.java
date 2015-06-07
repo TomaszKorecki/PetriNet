@@ -182,5 +182,13 @@ public class IncidenceMatrix {
     }
 
 
+    public int sumPlaceChanges(int k){
+        int sum = 0;
+        for(int i = 0; i < transitionsCount; i++){
+            sum += incidenceMatrix[k][i];
+        }
+        return sum;
+    }
+
 
 }
