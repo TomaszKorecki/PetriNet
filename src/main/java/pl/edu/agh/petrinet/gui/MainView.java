@@ -14,9 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import pl.edu.agh.petrinet.gui.submenus.ArchivingGUI;
-import pl.edu.agh.petrinet.gui.submenus.AttributesGUI;
-import pl.edu.agh.petrinet.gui.submenus.SimulationGUI;
+import pl.edu.agh.petrinet.gui.submenus.*;
 import pl.edu.agh.petrinet.gui.visualizationViewers.PetriNetVisualizationViewer;
 import pl.edu.agh.petrinet.model.PetriGraph;
 import pl.edu.agh.petrinet.model.PetriGraphUtils;
@@ -37,6 +35,8 @@ public class MainView extends Application {
 
     private PetriNetVisualizationViewer petriNetVIsualizationViewer;
 
+    private SelectedToolGUI selectedToolGUI;
+    private PetriNetTypeGUI netTypeGUI;
     private SimulationGUI simulationGUI;
     private Pane simulationPane;
 
@@ -81,10 +81,12 @@ public class MainView extends Application {
         leftPane.setPadding(new Insets(10, 10, 10, 10));
         leftPane.setMinWidth(200);
 
+        selectedToolGUI  = new SelectedToolGUI(petriNetVIsualizationViewer, this);
+        netTypeGUI = new PetriNetTypeGUI(petriNetVIsualizationViewer, this);
         simulationGUI = new SimulationGUI(petriNetVIsualizationViewer, this);
         simulationPane = simulationGUI.getNewSimulationPane();
 
-        leftPane.getChildren().addAll(createPetriNetTypeMenu(), simulationPane);
+        leftPane.getChildren().addAll(selectedToolGUI.getPane(),netTypeGUI.getPane(), simulationPane);
         rootPane.setLeft(leftPane);
     }
 
@@ -92,6 +94,7 @@ public class MainView extends Application {
         rightPane = new VBox(10);
         rightPane.setPadding(new Insets(10, 10, 10, 10));
         rightPane.setMinWidth(200);
+
 
         archivingGUI = new ArchivingGUI(petriNetVIsualizationViewer, primaryStage, this);
         attributesGUI = new AttributesGUI(petriNetVIsualizationViewer, this);
@@ -118,42 +121,7 @@ public class MainView extends Application {
     }
 
 
-    private Pane createPetriNetTypeMenu(){
-        VBox petriNetTypePane = new VBox(5);
-
-        Text headerText = new Text("Petri Net type");
-        Separator separator = new Separator();
-        separator.setOrientation(Orientation.HORIZONTAL);
-        separator.setMinHeight(2);
-
-        final ToggleGroup toggleGroup = new ToggleGroup();
-        RadioButton defaultNetRadioButton = new RadioButton("Default");
-        RadioButton priorityNetRadioButton = new RadioButton("Priority");
-        RadioButton timeNetRadioButton = new RadioButton("Time");
-        defaultNetRadioButton.setToggleGroup(toggleGroup);
-        priorityNetRadioButton.setToggleGroup(toggleGroup);
-        timeNetRadioButton.setToggleGroup(toggleGroup);
-
-        defaultNetRadioButton.setSelected(true);
-        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == defaultNetRadioButton) {
-                petriNetVIsualizationViewer.getPetriGraph().setType(PetriGraph.Type.DEFAULT);
-            } else if (newValue == priorityNetRadioButton) {
-                petriNetVIsualizationViewer.getPetriGraph().setType(PetriGraph.Type.PRIORYTY);
-            } else if (newValue == timeNetRadioButton) {
-                petriNetVIsualizationViewer.getPetriGraph().setType(PetriGraph.Type.TIME);
-            }
-
-            refreshSimulationMenu();
-        });
-
-
-        petriNetTypePane.getChildren().addAll(headerText, defaultNetRadioButton, priorityNetRadioButton, timeNetRadioButton, separator);
-
-        return petriNetTypePane;
-    }
-
-    private void refreshSimulationMenu(){
+    public void refreshSimulationMenu(){
         leftPane.getChildren().remove(simulationPane);
         simulationPane = simulationGUI.getNewSimulationPane();
         leftPane.getChildren().addAll(simulationPane);

@@ -16,17 +16,22 @@ public class PetriNetModalGraphMouse<PetriVertex, PetriEdge> extends AbstractMod
 
     protected PetriNetEditingEdgeMousePlugin petriNetEditingEdgeMousePlugin;
     private PetriGraph petriGraph;
+    private MouseModeChangedCallback modeChangedCallback;
 
-    public PetriNetModalGraphMouse(PetriGraph petriGraph) {
-        this(1.1F, 0.9090909F, petriGraph);
+    public PetriNetModalGraphMouse(PetriGraph petriGraph, MouseModeChangedCallback mouseModeChangedCallback) {
+        this(1.1F, 0.9090909F, petriGraph, mouseModeChangedCallback);
     }
 
-
-    public PetriNetModalGraphMouse(float in, float out, PetriGraph petriGraph) {
+    public PetriNetModalGraphMouse(float in, float out, PetriGraph petriGraph, MouseModeChangedCallback mouseModeChangedCallback) {
         super(in, out);
         this.petriGraph = petriGraph;
         this.loadPlugins();
         this.setModeKeyListener(new PetriNetModalGraphMouse.ModeKeyAdapter(this));
+        this.modeChangedCallback = mouseModeChangedCallback;
+    }
+
+    public void setModeChangedCallback(MouseModeChangedCallback callback){
+        this.modeChangedCallback = callback;
     }
 
     protected void loadPlugins() {
@@ -63,6 +68,9 @@ public class PetriNetModalGraphMouse<PetriVertex, PetriEdge> extends AbstractMod
         this.remove(this.petriNetEditingEdgeMousePlugin);
         this.add(this.pickingPlugin);
         this.add(this.animatedPickingPlugin);
+
+        if(modeChangedCallback != null)
+            this.modeChangedCallback.modeChanged(Mode.PICKING);
     }
 
     protected void setTransformingMode() {
@@ -72,6 +80,9 @@ public class PetriNetModalGraphMouse<PetriVertex, PetriEdge> extends AbstractMod
         this.add(this.translatingPlugin);
         this.add(this.rotatingPlugin);
         this.add(this.shearingPlugin);
+
+        if(modeChangedCallback != null)
+            this.modeChangedCallback.modeChanged(Mode.TRANSFORMING);
     }
 
     protected void setEditingMode() {
@@ -81,6 +92,9 @@ public class PetriNetModalGraphMouse<PetriVertex, PetriEdge> extends AbstractMod
         this.remove(this.rotatingPlugin);
         this.remove(this.shearingPlugin);
         this.add(this.petriNetEditingEdgeMousePlugin);
+
+        if(modeChangedCallback != null)
+            this.modeChangedCallback.modeChanged(Mode.EDITING);
     }
 
 
@@ -113,7 +127,6 @@ public class PetriNetModalGraphMouse<PetriVertex, PetriEdge> extends AbstractMod
                 ((Component) event.getSource()).setCursor(Cursor.getPredefinedCursor(1));
                 this.graphMouse.setMode(Mode.EDITING);
             }
-
         }
     }
 }

@@ -2,6 +2,7 @@ package pl.edu.agh.petrinet.gui.visualizationViewers;
 
 import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.control.AbstractGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.AbstractModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -10,6 +11,7 @@ import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization3d.decorators.PickableVertexPaintTransformer;
 import javafx.embed.swing.SwingNode;
 import org.apache.commons.collections15.Transformer;
+import pl.edu.agh.petrinet.gui.customPlugins.MouseModeChangedCallback;
 import pl.edu.agh.petrinet.gui.customPlugins.PetriNetGraphPopup;
 import pl.edu.agh.petrinet.gui.customPlugins.PetriNetModalGraphMouse;
 import pl.edu.agh.petrinet.model.*;
@@ -49,6 +51,9 @@ public class PetriNetVisualizationViewer {
 
 	private SwingNode swingNode;
 
+	PetriNetModalGraphMouse gm;
+	private MouseModeChangedCallback mouseModeChangedCallback;
+
 	public PetriNetVisualizationViewer(PetriGraph petriGraph, SwingNode swingNode) {
 		this.petriGraph = petriGraph;
 		this.swingNode = swingNode;
@@ -59,7 +64,7 @@ public class PetriNetVisualizationViewer {
 		visualizationViewer = new VisualizationViewer<>(new ISOMLayout<>(petriGraph.getGraph()));
 		visualizationViewer.setBorder(new TitledBorder("Graf testowy"));
 
-		AbstractModalGraphMouse gm = new PetriNetModalGraphMouse<>(petriGraph);
+		gm = new PetriNetModalGraphMouse<>(petriGraph, mouseModeChangedCallback);
 
 		visualizationViewer.setGraphMouse(gm);
 
@@ -91,6 +96,15 @@ public class PetriNetVisualizationViewer {
 
 	public PetriGraph getPetriGraph() {
 		return this.petriGraph;
+	}
+
+	public AbstractModalGraphMouse getModalMousePlugin(){
+		return gm;
+	}
+
+	public void registerCallback(MouseModeChangedCallback callback){
+		this.mouseModeChangedCallback = callback;
+		this.gm.setModeChangedCallback(callback);
 	}
 
 	public void setPetriGraph(PetriGraph petriGraph) {

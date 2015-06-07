@@ -75,6 +75,6 @@ public class AttributesGUI {
 		});
 
 
-		attributesVPane.getChildren().addAll(headerText, separator, refreshAttributesButton, reachabilityGraphButton);
+		attributesVPane.getChildren().addAll(headerText, refreshAttributesButton, reachabilityGraphButton, separator);
 	}
 }
