@@ -15,6 +15,7 @@ public class PetriStateGraph {
      * List of states and transitions
      */
     private Graph<PetriStateVertex, PetriStateEdge> graph;
+    private PetriStateVertex m0;
 
     /**
      * Constrictor
@@ -30,6 +31,7 @@ public class PetriStateGraph {
      */
     public void addM0(PetriStateVertex m0) {
         graph.addVertex(m0);
+        this.m0 = m0;
     }
 
     /**
@@ -83,5 +85,9 @@ public class PetriStateGraph {
 
     public Graph<PetriStateVertex, PetriStateEdge> getGraph(){
         return  graph;
+    }
+
+    public PetriStateVertex getM0() {
+        return m0;
     }
 }
