@@ -32,7 +32,7 @@ public class ReachabilityGraphWindow  {
 		reachabilityGraphVisualizationViewer = new ReachabilityGraphVisualizationViewer(petriGraph, swingNode);
 
 		primaryStage = new Stage();
-		primaryStage.setTitle("Reachability graph");
+		primaryStage.setTitle(reachabilityGraphVisualizationViewer.getProperTitle());
 		primaryStage.setScene(new Scene(rootPane, 900, 600));
 	}
 

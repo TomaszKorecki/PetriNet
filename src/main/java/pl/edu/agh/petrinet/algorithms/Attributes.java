@@ -28,6 +28,18 @@ public class Attributes {
 		computeAttributes();
 	}
 
+	public Map<Integer, Integer> getPlacesLimitation(){
+		return  placesLimitation;
+	}
+
+	public Map<Integer, Boolean> getPlacesLiveness(){
+		return placesLiveness;
+	}
+
+	public Map<Integer, Boolean> getTransitionsLiveness(){
+		return transitionsLiveness;
+	}
+
 	public Integer getPlaceLimitation(int placeId) {
 		return placesLimitation.get(placeId);
 	}
