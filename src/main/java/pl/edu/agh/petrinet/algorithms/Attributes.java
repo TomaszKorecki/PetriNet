@@ -1,5 +1,8 @@
 package pl.edu.agh.petrinet.algorithms;
 
+import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
+import edu.uci.ics.jung.algorithms.shortestpath.ShortestPathUtils;
+import edu.uci.ics.jung.graph.Graph;
 import pl.edu.agh.petrinet.model.*;
 
 import java.util.HashMap;
@@ -193,7 +196,21 @@ public class Attributes {
 	}
 
 	private void computeReversibility() {
+		PetriStateGraph stateGraph = graph.getReachabilityGraph().getStateGraph();
+		PetriStateVertex m0 = stateGraph.getM0();
 
+		for (PetriStateVertex psv : graph.getReachabilityGraph().getStateGraph().getVertices()) {
+			if (psv == m0) {
+				continue;
+			}
+
+			if (ShortestPathUtils.getPath(stateGraph.getGraph(), new DijkstraShortestPath<>(stateGraph.getGraph()), psv, stateGraph.getM0()).isEmpty()) {
+				isReversible = false;
+				return;
+			}
+		}
+
+		isReversible = true;
 	}
 
 	private void computeLiveness() {
