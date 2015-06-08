@@ -1,5 +1,6 @@
 package pl.edu.agh.petrinet.gui.submenus;
 
+import com.google.common.primitives.Ints;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.HPos;
@@ -7,7 +8,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -19,6 +22,9 @@ import pl.edu.agh.petrinet.model.PetriGraph;
 
 import javax.swing.text.Element;
 import javax.swing.text.TableView;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,10 +53,11 @@ public class AttributesWindow {
 		createLimitationPane();
 		createLivenessPane();
 		createIncidenceMatrix();
+		createWeightVectorPane();
 
 		primaryStage = new Stage();
 		primaryStage.setTitle("Attributes");
-		primaryStage.setScene(new Scene(rootPane, 600, 400));
+		primaryStage.setScene(new Scene(rootPane, 700, 500));
 	}
 
 	private void createNetAtrributesPane(){
@@ -176,7 +183,6 @@ public class AttributesWindow {
 
 		VBox incidenceMatrixPane = new VBox(3);
 		incidenceMatrixPane.setPadding(new Insets(10, 10, 10, 10));
-
 		incidenceMatrixPane.getChildren().add(new Text("Incidence matrix"));
 
 
@@ -208,6 +214,50 @@ public class AttributesWindow {
 		separator.setMaxWidth(2);
 
 		attributesPane.getChildren().addAll(incidenceMatrixPane, separator);
+	}
+
+
+	private void createWeightVectorPane(){
+
+		VBox weightVectorPane = new VBox(3);
+		weightVectorPane.setPadding(new Insets(10, 10, 10, 10));
+		weightVectorPane.getChildren().add(new Text("Conservative by vector:"));
+
+		weightVectorPane.getChildren().addAll(new Text("Vector (coma separated)"));
+
+		TextField vectorInput = new TextField();
+		vectorInput.setPromptText("1,2,3");
+
+		Button checkButton = new Button("Check");
+
+		Text outputText = new Text();
+
+		checkButton.setOnAction(event -> {
+			String [] items = vectorInput.getText().split(",");
+
+			if(items.length != petriGraph.getPlacesCount()){
+				outputText.setText("Vector length should have length of " + petriGraph.getPlacesCount());
+				return;
+			}
+
+			List<String> strings = Arrays.asList(items);
+			List<Integer> ints = new LinkedList<Integer>();
+
+			try{
+				for(String s : strings){
+					ints.add(Integer.parseInt(s));
+				}
+			} catch (NumberFormatException exception) {
+				outputText.setText("Input string has got wrong format");
+				return;
+			}
+
+			outputText.setText((calculatedAttributes.isNetConservative(Ints.toArray(ints)) ? "Net is conservative" : "Net is not conservative") + " by given vector");
+			
+		});
+
+		weightVectorPane.getChildren().addAll(vectorInput, checkButton, outputText);
+		attributesPane.getChildren().add(weightVectorPane);
 	}
 
 
