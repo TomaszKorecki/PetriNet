@@ -188,7 +188,7 @@ public class AttributesWindow {
 		grid.setHgap(12);
 		grid.setVgap(7);
 		//grid.setGridLinesVisible(true);
-		
+
 
 		for(int i = 0; i < matrix.length; i++){
 			for(int k = 0; k < matrix[0].length; k++){

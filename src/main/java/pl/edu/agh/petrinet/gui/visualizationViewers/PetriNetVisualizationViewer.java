@@ -179,7 +179,7 @@ public class PetriNetVisualizationViewer {
 			if (petriVertex instanceof PetriPlace) {
 				return new Ellipse2D.Double(-15, -15, 30, 30);
 			} else if (petriVertex instanceof PetriTransition) {
-				return new Rectangle2D.Float(-20, -20, 50, 30);
+				return new Rectangle2D.Float(0, -20, 15, 40);
 			} else return null;
 		};
 	}
