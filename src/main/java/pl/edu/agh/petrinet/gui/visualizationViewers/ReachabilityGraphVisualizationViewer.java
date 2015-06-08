@@ -45,13 +45,10 @@ public class ReachabilityGraphVisualizationViewer {
 
 	private void initialize() {
 		visualizationViewer = new VisualizationViewer<>(new ISOMLayout<>(reachabilityGraph.getPetriStateGraph().getGraph()));
-		visualizationViewer.setBorder(new TitledBorder("Reachability graph"));
+		visualizationViewer.setBorder(new TitledBorder(getProperTitle()));
 
 		DefaultModalGraphMouse<PetriStateVertex, PetriStateEdge> defaultModalGraphMouse = new DefaultModalGraphMouse<>();
 		visualizationViewer.addKeyListener(defaultModalGraphMouse.getModeKeyListener());
-
-		//defaultModalGraphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
-		//defaultModalGraphMouse.setMode(ModalGraphMouse.Mode.PICKING);
 
 		visualizationViewer.setGraphMouse(defaultModalGraphMouse);
 		visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<>());
@@ -60,5 +57,9 @@ public class ReachabilityGraphVisualizationViewer {
 		visualizationViewer.setPreferredSize(new Dimension(600, 400));
 
 		SwingUtilities.invokeLater(() -> swingNode.setContent(visualizationViewer));
+	}
+
+	public String getProperTitle(){
+		return (this.reachabilityGraph.isCoverabilityGraph() ? "Coverability" : "Reachability") + " graph";
 	}
 }

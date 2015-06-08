@@ -47,7 +47,7 @@ public class AttributesGUI {
 		separator.setOrientation(Orientation.HORIZONTAL);
 		separator.setMinHeight(2);
 
-		Button refreshAttributesButton = new Button("Calcuate");
+		Button refreshAttributesButton = new Button("Show attributes");
 		refreshAttributesButton.setOnAction(event -> {
 			PetriGraph petriGraph = petriNetVisualizationViewer.getPetriGraph();
 			petriGraph.validateGraph();
@@ -55,14 +55,14 @@ public class AttributesGUI {
 				Console.writeGraphValidationResult(petriGraph);
 			} else {
 				petriGraph.compute();
-				Attributes calculatedAttributes = new Attributes(petriGraph);
 
 				Console.clearConsole();
-				Console.writeOnConsole(calculatedAttributes.oneColumnString());
+				//Console.writeOnConsole(calculatedAttributes.oneColumnString());
+				new AttributesWindow(petriNetVisualizationViewer.getPetriGraph()).show();
 			}
 		});
 
-		Button reachabilityGraphButton = new Button("Reachability graph");
+		Button reachabilityGraphButton = new Button("Reachability/Coverability graph");
 		reachabilityGraphButton.setOnAction(event -> {
 			PetriGraph petriGraph = petriNetVisualizationViewer.getPetriGraph();
 			petriGraph.validateGraph();
