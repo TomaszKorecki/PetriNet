@@ -20,13 +20,17 @@ public class PetriNetTypeGUI {
 	private MainView mainView;
 	private VBox petriNetTypePane;
 
+	RadioButton defaultNetRadioButton;
+	RadioButton priorityNetRadioButton;
+	RadioButton timeNetRadioButton;
+
 	public PetriNetTypeGUI(PetriNetVisualizationViewer petriNetVisualizationViewer, MainView mainView) {
 		this.petriNetVisualizationViewer = petriNetVisualizationViewer;
 		this.mainView = mainView;
 		createSelectionMenu();
 	}
 
-	private void createSelectionMenu(){
+	private void createSelectionMenu() {
 
 		petriNetTypePane = new VBox(5);
 
@@ -36,15 +40,16 @@ public class PetriNetTypeGUI {
 		separator.setMinHeight(2);
 
 		final ToggleGroup toggleGroup = new ToggleGroup();
-		RadioButton defaultNetRadioButton = new RadioButton("Default");
-		RadioButton priorityNetRadioButton = new RadioButton("Priority");
-		RadioButton timeNetRadioButton = new RadioButton("Time");
+		defaultNetRadioButton = new RadioButton("Default");
+		priorityNetRadioButton = new RadioButton("Priority");
+		timeNetRadioButton = new RadioButton("Time");
 		defaultNetRadioButton.setToggleGroup(toggleGroup);
 		priorityNetRadioButton.setToggleGroup(toggleGroup);
 		timeNetRadioButton.setToggleGroup(toggleGroup);
 
 		defaultNetRadioButton.setSelected(true);
 		toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+			System.out.println("listener here...!");
 			if (newValue == defaultNetRadioButton) {
 				petriNetVisualizationViewer.getPetriGraph().setType(PetriGraph.Type.DEFAULT);
 			} else if (newValue == priorityNetRadioButton) {
@@ -61,7 +66,17 @@ public class PetriNetTypeGUI {
 
 	}
 
-	public Pane getPane(){
+	public void setManuallyType(PetriGraph.Type type) {
+		if (type == PetriGraph.Type.DEFAULT) {
+			defaultNetRadioButton.setSelected(true);
+		} else if (type == PetriGraph.Type.PRIORYTY) {
+			priorityNetRadioButton.setSelected(true);
+		} else if (type == PetriGraph.Type.TIME) {
+			timeNetRadioButton.setSelected(true);
+		}
+	}
+
+	public Pane getPane() {
 		return petriNetTypePane;
 	}
 }

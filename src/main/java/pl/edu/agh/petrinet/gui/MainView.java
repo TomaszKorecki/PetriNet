@@ -127,5 +127,9 @@ public class MainView extends Application {
         leftPane.getChildren().addAll(simulationPane);
     }
 
+    public void setGraphType(PetriGraph.Type type){
+        netTypeGUI.setManuallyType(type);
+    }
+
 
 }
