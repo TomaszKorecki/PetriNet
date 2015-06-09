@@ -61,8 +61,6 @@ public class ArchivingGUI {
 	}
 
 	void onSaveButton() {
-		petriGraph.compute();
-
 		PetriSerialization petriSerialization = new PetriSerialization(petriGraph);
 
 		FileChooser fileChooser = new FileChooser();
