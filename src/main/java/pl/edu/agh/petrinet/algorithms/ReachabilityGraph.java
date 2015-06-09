@@ -1,10 +1,7 @@
 package pl.edu.agh.petrinet.algorithms;
 
 import org.apache.commons.lang3.ArrayUtils;
-import pl.edu.agh.petrinet.model.PetriGraph;
-import pl.edu.agh.petrinet.model.PetriStateGraph;
-import pl.edu.agh.petrinet.model.PetriStateVertex;
-import pl.edu.agh.petrinet.model.PetriTransition;
+import pl.edu.agh.petrinet.model.*;
 
 import java.util.*;
 
@@ -79,6 +76,8 @@ public class ReachabilityGraph {
         return  stateGraph;
     }
 
+    private PetriStateVertex sM0;
+
     /**
      * Main generating function
      */
@@ -87,7 +86,7 @@ public class ReachabilityGraph {
         transitions = graph.getTransitionsHash();
 
         // Create M0 state
-        PetriStateVertex sM0 = new PetriStateVertex(graph.getM0(), 0);
+        sM0 = new PetriStateVertex(graph.getM0(), 0);
 
         // For Time graph add times
         if(graph.getType() == PetriGraph.Type.TIME){
@@ -190,30 +189,43 @@ public class ReachabilityGraph {
 
         // If list is not empty
         if(possibleTransition.isEmpty() == false){
-            // Find if any of next possible transition is already on the route
-            int loopId = -1;
-            for(Integer nTId : possibleTransition){
-                // It might bee last transitions
-                if(nTId == lastTransition){
-                    loopId = lastTransition;
-                    break;
-                }
-                // or one from route
-                if(state.getRoute().contains(nTId)){
-                    loopId = nTId;
-                    break;
-                }
-            }
 
+            List<Integer> path = null;
+
+           /* if(state.getRoute().contains(lastTransition)){
+                List<Integer> tmpList = new LinkedList<>(state.getRoute());
+                tmpList.add(lastTransition);
+                path = transitionExistToRootFindNext(tmpList, lastTransition);
+            }*/
+
+            // Find if any of next possible transition is already on the route
+            //if(path != null){
+                for(Integer nTId : possibleTransition){
+                    // It might bee last transitions
+                    if(nTId == lastTransition){
+                        path = new LinkedList<>();
+                        path.add(lastTransition);
+                        break;
+                    }
+
+                    // or one from route
+                    if(state.getRoute().contains(nTId)){
+                        path = transitionExistToRoot(state.getRoute(), nTId, lastTransition);
+                        if(path != null)
+                            break;
+                    }
+                }
+
+            //}
             // If we find transition id we have loop
-            if(loopId > -1){
+            if(path != null){
 
                 // Calculate mark change on each place on the route so far
                 int[] routeStateCount = new int[graph.getPlacesCount()];
                 for(int k = 0; k < graph.getPlacesCount(); k++){
                     routeStateCount[k] += tIncidenceMatrix[lastTransition][k];
                 }
-                for(int nTid : state.getRoute()){
+                for(int nTid : path){
                     for(int k = 0; k < graph.getPlacesCount(); k++){
                         routeStateCount[k] += tIncidenceMatrix[nTid][k];
                     }
@@ -246,6 +258,50 @@ public class ReachabilityGraph {
                 }
             }
         }
+    }
+
+    private List<Integer> transitionExistToRoot(List<Integer> route, int startTranistion, int lastTransition){
+        for(PetriVertex pv : graph.getGraph().getPredecessors(graph.getTransition(route.get(route.indexOf(startTranistion))))){
+            List<Integer> start = new LinkedList<>();
+            List<Integer> x = transitionExistToRoot(route, start, route.indexOf(startTranistion), lastTransition, pv.getId());
+            if(x != null)
+                return x;
+        }
+        return null;
+    }
+
+    private List<Integer> transitionExistToRootFindNext(List<Integer> route, int lastTransition){
+        for(PetriVertex pv : graph.getGraph().getPredecessors(graph.getTransition(route.get(route.indexOf(lastTransition))))){
+            List<Integer> start = new LinkedList<>();
+            start.add(route.get(route.indexOf(lastTransition)));
+            List<Integer> x = transitionExistToRoot(route, start, route.indexOf(lastTransition)+1, lastTransition, pv.getId());
+            if(x != null)
+                return x;
+        }
+        return null;
+    }
+
+    private List<Integer> transitionExistToRoot(List<Integer> route, List<Integer> retRoute, int nextRouteId, int lastTransition, int startPlaceId){
+        if(nextRouteId >= route.size())
+            return null;
+
+        for(PetriVertex pv : graph.getGraph().getPredecessors(graph.getTransition(route.get(nextRouteId)))){
+            if(pv.getId() == startPlaceId){
+                if(route.get(nextRouteId) == lastTransition){
+                    return retRoute;
+                }
+
+                for(PetriVertex pv2 : graph.getGraph().getSuccessors(graph.getTransition(route.get(nextRouteId)))){
+                    List<Integer> newList = new LinkedList<>(retRoute);
+                    newList.add(route.get(nextRouteId));
+                    List<Integer> toRet = transitionExistToRoot(route, newList, nextRouteId+1, lastTransition, pv2.getId());
+                    if(toRet != null){
+                        return toRet;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**
