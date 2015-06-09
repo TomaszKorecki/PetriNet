@@ -153,7 +153,7 @@ public class AttributesWindow {
 		livenessTexts.getChildren().add(new Text(" "));
 		livenessValues.getChildren().add(new Text(" "));
 
-		Map<Integer, Boolean> transitionLiveness = calculatedAttributes.getPlacesLiveness();
+		Map<Integer, Boolean> transitionLiveness = calculatedAttributes.getTransitionsLiveness();
 
 		transitionLiveness.forEach((id, value) -> {
 
