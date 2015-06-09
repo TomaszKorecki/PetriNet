@@ -13,7 +13,7 @@
       <Place ID="9" Markers="0"/>
       <Place ID="10" Markers="0"/>
       <Place ID="11" Markers="0"/>
-      <Place ID="12" Markers="0"/>
+      <Place ID="12" Markers="2"/>
       <Place ID="13" Markers="0"/>
       <Place ID="14" Markers="0"/>
       <Place ID="15" Markers="0"/>
@@ -43,14 +43,50 @@
       <Transition ID="17" TimeOrPriority="0"/>
    </Transitions>
    <Edges class="java.util.ArrayList">
-      <Edge Markers="1" FromType="Place" FromId="0" ToType="Transition" ToId="0"/>
-      <Edge Markers="1" FromType="Place" FromId="1" ToType="Transition" ToId="1"/>
-      <Edge Markers="1" FromType="Transition" FromId="0" ToType="Place" ToId="1"/>
-      <Edge Markers="1" FromType="Place" FromId="2" ToType="Transition" ToId="2"/>
+      <Edge Markers="1" FromType="Place" FromId="17" ToType="Transition" ToId="6"/>
       <Edge Markers="1" FromType="Transition" FromId="1" ToType="Place" ToId="2"/>
-      <Edge Markers="1" FromType="Transition" FromId="2" ToType="Place" ToId="3"/>
-      <Edge Markers="1" FromType="Transition" FromId="14" ToType="Place" ToId="0"/>
+      <Edge Markers="1" FromType="Place" FromId="16" ToType="Transition" ToId="5"/>
+      <Edge Markers="1" FromType="Transition" FromId="0" ToType="Place" ToId="1"/>
+      <Edge Markers="1" FromType="Transition" FromId="6" ToType="Place" ToId="8"/>
       <Edge Markers="1" FromType="Place" FromId="3" ToType="Transition" ToId="3"/>
+      <Edge Markers="1" FromType="Transition" FromId="5" ToType="Place" ToId="7"/>
+      <Edge Markers="1" FromType="Transition" FromId="7" ToType="Place" ToId="11"/>
+      <Edge Markers="1" FromType="Place" FromId="14" ToType="Transition" ToId="11"/>
+      <Edge Markers="1" FromType="Transition" FromId="4" ToType="Place" ToId="6"/>
+      <Edge Markers="1" FromType="Transition" FromId="16" ToType="Place" ToId="17"/>
+      <Edge Markers="2" FromType="Transition" FromId="17" ToType="Place" ToId="19"/>
+      <Edge Markers="2" FromType="Place" FromId="6" ToType="Transition" ToId="16"/>
+      <Edge Markers="1" FromType="Transition" FromId="12" ToType="Place" ToId="10"/>
+      <Edge Markers="4" FromType="Transition" FromId="14" ToType="Place" ToId="0"/>
+      <Edge Markers="1" FromType="Place" FromId="19" ToType="Transition" ToId="4"/>
+      <Edge Markers="1" FromType="Place" FromId="5" ToType="Transition" ToId="17"/>
+      <Edge Markers="2" FromType="Place" FromId="2" ToType="Transition" ToId="2"/>
       <Edge Markers="1" FromType="Transition" FromId="3" ToType="Place" ToId="4"/>
+      <Edge Markers="1" FromType="Transition" FromId="15" ToType="Place" ToId="13"/>
+      <Edge Markers="3" FromType="Transition" FromId="14" ToType="Place" ToId="9"/>
+      <Edge Markers="1" FromType="Transition" FromId="11" ToType="Place" ToId="10"/>
+      <Edge Markers="1" FromType="Place" FromId="8" ToType="Transition" ToId="7"/>
+      <Edge Markers="1" FromType="Place" FromId="11" ToType="Transition" ToId="9"/>
+      <Edge Markers="1" FromType="Place" FromId="13" ToType="Transition" ToId="10"/>
+      <Edge Markers="1" FromType="Transition" FromId="8" ToType="Place" ToId="12"/>
+      <Edge Markers="1" FromType="Transition" FromId="16" ToType="Place" ToId="16"/>
+      <Edge Markers="1" FromType="Transition" FromId="10" ToType="Place" ToId="10"/>
+      <Edge Markers="1" FromType="Transition" FromId="15" ToType="Place" ToId="15"/>
+      <Edge Markers="2" FromType="Place" FromId="1" ToType="Transition" ToId="1"/>
+      <Edge Markers="3" FromType="Place" FromId="9" ToType="Transition" ToId="15"/>
+      <Edge Markers="2" FromType="Place" FromId="12" ToType="Transition" ToId="14"/>
+      <Edge Markers="1" FromType="Place" FromId="4" ToType="Transition" ToId="7"/>
+      <Edge Markers="1" FromType="Place" FromId="15" ToType="Transition" ToId="12"/>
+      <Edge Markers="1" FromType="Place" FromId="11" ToType="Transition" ToId="8"/>
+      <Edge Markers="1" FromType="Transition" FromId="14" ToType="Place" ToId="5"/>
+      <Edge Markers="1" FromType="Place" FromId="18" ToType="Transition" ToId="2"/>
+      <Edge Markers="1" FromType="Transition" FromId="9" ToType="Place" ToId="12"/>
+      <Edge Markers="1" FromType="Place" FromId="7" ToType="Transition" ToId="7"/>
+      <Edge Markers="1" FromType="Place" FromId="10" ToType="Transition" ToId="13"/>
+      <Edge Markers="1" FromType="Place" FromId="0" ToType="Transition" ToId="0"/>
+      <Edge Markers="1" FromType="Transition" FromId="17" ToType="Place" ToId="18"/>
+      <Edge Markers="1" FromType="Transition" FromId="2" ToType="Place" ToId="3"/>
+      <Edge Markers="1" FromType="Transition" FromId="13" ToType="Place" ToId="12"/>
+      <Edge Markers="1" FromType="Transition" FromId="15" ToType="Place" ToId="14"/>
    </Edges>
 </PetriGraph>
