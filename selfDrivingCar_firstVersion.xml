@@ -82,7 +82,7 @@
       <Edge Markers="1" FromType="Place" FromId="18" ToType="Transition" ToId="2"/>
       <Edge Markers="1" FromType="Transition" FromId="9" ToType="Place" ToId="12"/>
       <Edge Markers="1" FromType="Place" FromId="7" ToType="Transition" ToId="7"/>
-      <Edge Markers="1" FromType="Place" FromId="10" ToType="Transition" ToId="13"/>
+      <Edge Markers="3" FromType="Place" FromId="10" ToType="Transition" ToId="13"/>
       <Edge Markers="1" FromType="Place" FromId="0" ToType="Transition" ToId="0"/>
       <Edge Markers="1" FromType="Transition" FromId="17" ToType="Place" ToId="18"/>
       <Edge Markers="1" FromType="Transition" FromId="2" ToType="Place" ToId="3"/>
