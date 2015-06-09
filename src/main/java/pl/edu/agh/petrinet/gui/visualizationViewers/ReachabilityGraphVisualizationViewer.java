@@ -3,7 +3,6 @@ package pl.edu.agh.petrinet.gui.visualizationViewers;
 import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import javafx.embed.swing.SwingNode;
@@ -28,7 +27,6 @@ public class ReachabilityGraphVisualizationViewer {
 
 	public ReachabilityGraphVisualizationViewer(PetriGraph petriGraph, SwingNode swingNode) {
 		this.petriGraph = petriGraph;
-		petriGraph.compute();
 		this.reachabilityGraph = petriGraph.getReachabilityGraph();
 
 		if (reachabilityGraph == null) {

@@ -8,12 +8,17 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import pl.edu.agh.petrinet.algorithms.Attributes;
 import pl.edu.agh.petrinet.gui.Console;
 import pl.edu.agh.petrinet.gui.MainView;
 import pl.edu.agh.petrinet.gui.ReachabilityGraphWindow;
+import pl.edu.agh.petrinet.gui.customPlugins.ComputeTask;
 import pl.edu.agh.petrinet.gui.visualizationViewers.PetriNetVisualizationViewer;
 import pl.edu.agh.petrinet.model.PetriGraph;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Tomasz on 5/17/2015.
@@ -54,11 +59,24 @@ public class AttributesGUI {
 			if (!petriGraph.isGraphIsValid()) {
 				Console.writeGraphValidationResult(petriGraph);
 			} else {
-				petriGraph.compute();
+                boolean done = true;
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Future<String> future = executor.submit(new ComputeTask(petriGraph));
+                try{
+                    future.get(30, TimeUnit.SECONDS);
+                }catch (Exception e){
+                    done = false;
+                }
+                executor.shutdownNow();
 
 				Console.clearConsole();
+                if(done){
 				//Console.writeOnConsole(calculatedAttributes.oneColumnString());
 				new AttributesWindow(petriNetVisualizationViewer.getPetriGraph()).show();
+                }
+                else{
+                    Console.writeOnConsole("Graph calculating was too long and was stopped...");
+                }
 			}
 		});
 
@@ -69,8 +87,25 @@ public class AttributesGUI {
 			if (!petriGraph.isGraphIsValid()) {
 				Console.writeGraphValidationResult(petriGraph);
 			} else {
-				ReachabilityGraphWindow window = new ReachabilityGraphWindow(petriGraph);
-				window.show();
+
+                boolean done = true;
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Future<String> future = executor.submit(new ComputeTask(petriGraph));
+                try{
+                    future.get(30, TimeUnit.SECONDS);
+                }catch (Exception e){
+                    done = false;
+                }
+                executor.shutdownNow();
+
+                Console.clearConsole();
+                if(done){
+                    ReachabilityGraphWindow window = new ReachabilityGraphWindow(petriGraph);
+                    window.show();
+                }
+                else{
+                    Console.writeOnConsole("Graph calculating was too long and was stopped...");
+                }
 			}
 		});
 
